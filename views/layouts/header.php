@@ -6,6 +6,11 @@
     <title>Phoenix's Gambit: Love or Crown – iQIYI Clone</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="icon" type="image/png" href="https://ext.same-assets.com/3427629531/2793530229.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="public/css/style.css">
+    <style>
+      
+    </style>
   </head>
   <body class="bg-[#13141a] text-white font-sans min-h-screen text-lg">
     <!-- HEADER -->
@@ -13,7 +18,7 @@
       <img src="https://ext.same-assets.com/3427629531/2793530229.png" alt="iQIYI Logo" class="h-10 mr-10" />
       <nav class="flex gap-6 text-[#dbddcb] font-semibold">
         <a href="#" class="hover:text-[#27bd52] transition duration-200">Phim lẻ</a>
-        <a href="#" class="hover:text-[#27bd52] transition duration-200">Phim bộ</a>
+        <a href="views/movies/watchvideo.php" class="hover:text-[#27bd52] transition duration-200">Phim bộ</a>
         <a href="#" class="hover:text-[#27bd52] transition duration-200">Thể loại</a>
         <a href="#" class="hover:text-[#27bd52] transition duration-200">Quốc gia</a>
         <a href="#" class="hover:text-[#27bd52] transition duration-200">Năm phát hành</a>
