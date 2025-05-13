@@ -1,16 +1,14 @@
 <?php
+require_once 'Database.php';
 
 class MovieModel {
     private $apiKey = "9be884418bf4e79829b5014c71b06b52";
 
     private $conn;
+    
 
     public function __construct() {
-        $this->conn = new mysqli('localhost', 'root', '', 'movie_online');
-        if ($this->conn->connect_error) {
-            die("Connection failed: " . $this->conn->connect_error);
-        }
-        $this->conn->set_charset("utf8mb4");
+        $this->conn = Database::getConnection();
     }
 
     public function insertMovie($data) {
@@ -40,18 +38,29 @@ class MovieModel {
         $stmt->close();
     }
 
-    
+    public function getMovieBySlug($slug) {
+        $stmt = $this->conn->prepare("SELECT * FROM movies WHERE slug = ?");
+        $stmt->bind_param("s", $slug);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $movie = $result->fetch_assoc();
+        $stmt->close();
+        return $movie;
+    }
 
-    public function getPopularMovies($language = "vi-VN", $page = 1) {
-        $url = "https://api.themoviedb.org/3/movie/popular?api_key={$this->apiKey}&language={$language}&page={$page}";
+    public function getPopularMovies()
+    {
+        // Lấy 10 phim có view_count cao nhất
+        $sql = "SELECT * FROM movies ORDER BY views DESC LIMIT 10";
+        $result = $this->conn->query($sql);
 
-        $response = file_get_contents($url);
-        if ($response === FALSE) {
-            return [];
+        $movies = [];
+        if ($result && $result->num_rows > 0) {
+            while ($row = $result->fetch_assoc()) {
+                $movies[] = $row;
+            }
         }
-
-        $data = json_decode($response, true);
-        return $data['results'] ?? [];
+        return $movies;
     }
 
     // Lấy phim mới
@@ -71,6 +80,17 @@ class MovieModel {
         $data = json_decode($response, true);
         return isset($data['results']) ? $data['results'] : [];
     }
+
+    public function checkMovieExists($slug) {
+        $stmt = $this->conn->prepare("SELECT id FROM movies WHERE slug = ?");
+        $stmt->bind_param("s", $slug);
+        $stmt->execute();
+        $stmt->store_result();
+        $exists = $stmt->num_rows > 0;
+        $stmt->close();
+        return $exists;
+    }
+    
 }
 
 class CountryModel {

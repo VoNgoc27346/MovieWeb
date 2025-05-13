@@ -8,6 +8,13 @@ class MovieController {
 
     private $movieModel;
 
+    private function render($viewPath, $data = [])
+    {
+        extract($data); // chuyển mảng thành biến
+        require_once 'views/' . $viewPath . '.php';
+    }
+
+
     public function index() {
         $apiKey = '9be884418bf4e79829b5014c71b06b52';
         
@@ -48,7 +55,7 @@ class MovieController {
 
     public function fetchMoviesFromTMDB() {
         $apiKey = '9be884418bf4e79829b5014c71b06b52';
-        $url = "https://api.themoviedb.org/3/movie/popular?api_key=$apiKey&language=vi-VN&page=1";
+        $url = "https://api.themoviedb.org/3/movie/popular?api_key=$apiKey&language=vi-VN&page=5";
 
         // Gửi yêu cầu GET
         $response = file_get_contents($url);
@@ -56,28 +63,35 @@ class MovieController {
 
         if (!empty($moviesData['results'])) {
             foreach ($moviesData['results'] as $movie) {
+                $slug = $this->slugify($movie['title']);
+            
+                if ($this->movieModel->checkMovieExists($slug)) {
+                    // Nếu phim đã tồn tại -> bỏ qua
+                    continue;
+                }
+            
                 // Lấy trailer URL
                 $trailerUrl = $this->getTrailerUrl($movie['id'], $apiKey);
-
+            
                 // Map dữ liệu phim
                 $data = [
                     'title' => $movie['title'],
                     'original_title' => $movie['original_title'],
-                    'slug' => $this->slugify($movie['title']),
+                    'slug' => $slug,
                     'description' => $movie['overview'],
                     'poster' => 'https://image.tmdb.org/t/p/w500' . $movie['poster_path'],
                     'background' => 'https://image.tmdb.org/t/p/w500' . $movie['backdrop_path'],
                     'trailer_url' => $trailerUrl,
                     'release_year' => intval(substr($movie['release_date'], 0, 4)),
-                    'duration' => 120, // TMDB popular API không trả về duration
+                    'duration' => 120,
                     'quality' => 'HD',
                     'views' => rand(1000, 100000),
                     'rating' => $movie['vote_average'],
                     'status' => 'completed',
                     'premium' => 0,
-                    'country_id' => 1, // Tạm thời gán cứng
+                    'country_id' => 1,
                 ];
-
+            
                 $this->movieModel->insertMovie($data);
             }
             echo "Đã thêm phim và trailer thành công!";
@@ -85,6 +99,8 @@ class MovieController {
             echo "Không lấy được dữ liệu phim!";
         }
     }
+
+    
 
     private function getTrailerUrl($movieId, $apiKey) {
         $url = "https://api.themoviedb.org/3/movie/$movieId/videos?api_key=$apiKey&language=vi-VN";
@@ -108,5 +124,32 @@ class MovieController {
         return $text;
     }
     
+    public function home() {
+        // Load tất cả phim hoặc danh sách trang chủ
+        require_once 'views/home.php'; // File trang chủ
+    }
+
+    public function watch($slug) {
+        // Tìm phim theo slug trong database
+        $movie = $this->movieModel->getMovieBySlug($slug);
+    
+        if ($movie) {
+            // Gửi biến $movie vào view
+            $this->render('movies/watch', ['movie' => $movie]);
+        } else {
+            echo "Phim không tồn tại!";
+        }
+    }
+    
+
+    public function popularMovies()
+    {
+        $movieModel = new MovieModel();
+        $movies = $movieModel->getPopularMovies();
+
+        // Truyền biến $movies vào View
+        require_once 'views/movies/home.php';
+    }
 }
+    
 ?>

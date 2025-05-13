@@ -109,7 +109,7 @@
     </div>
 
 
-  
+    <!-- Phim Phổ Biến -->
     <section class="px-8 mt-6">
         <h2 class="text-2xl font-bold mb-6 text-white">Phim Phổ Biến</h2>
         <div class="movie-carousel overflow-visible relative"> <!-- Thay đổi overflow-hidden thành overflow-visible -->
@@ -129,7 +129,7 @@
                         
                         <!-- Poster -->
                         <img 
-                            src="https://image.tmdb.org/t/p/w300<?= $movie['poster_path'] ?>" 
+                            src="https://image.tmdb.org/t/p/w300<?= $movie['poster'] ?>" 
                             alt="<?= $movie['title'] ?>" 
                             class="w-full h-[390px] object-cover rounded-lg"
                             loading="lazy"
@@ -137,7 +137,7 @@
 
                         <!-- Rating Badge -->
                         <div class="absolute top-2 right-2 bg-yellow-500 text-black font-bold px-2 py-1 rounded-full text-xs flex items-center">
-                            <span class="mr-1">★</span> <?= $movie['vote_average'] ?>
+                            <span class="mr-1">★</span> <?= $movie['rating'] ?>
                         </div>
 
                         <!-- Hover Overlay - Fixed to prevent being cut off -->
@@ -149,7 +149,7 @@
                             
                             <!-- Backdrop -->
                             <img 
-                                src="https://image.tmdb.org/t/p/w500<?= $movie['backdrop_path'] ?>" 
+                                src="https://image.tmdb.org/t/p/w500<?= $movie['background'] ?>" 
                                 alt="<?= $movie['title'] ?>" 
                                 class="w-full h-[160px] object-cover rounded-t-lg"
                                 loading="lazy"
@@ -166,16 +166,20 @@
                                         <span class="bg-gray-700 px-2 py-0.5 rounded"><?= $movie['genres'] ?? 'Chưa rõ thể loại' ?></span>
 
                                     </div>
+                                    <!-- THÊM MÔ TẢ PHIM Ở ĐÂY -->
+                                    <p class="text-gray-300 text-sm mb-3 line-clamp-4 text-justify">
+                                        <?= $movie['description'] ?? 'Không có mô tả.' ?>
+                                    </p>
                                 </div>
 
                                 <!-- Action Buttons -->
                                 <div class="flex gap-2 mt-2">
-                                    <button class="bg-green-500 hover:bg-green-400 text-black font-semibold px-4 py-2 rounded-full flex items-center gap-1 text-lg transition-colors duration-200 flex-grow">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
-                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
-                                        </svg>
-                                        Xem ngay
-                                    </button>
+                                <a href="/MovieWeb/index.php?controller=movie&action=watch&slug=<?= $movie['slug'] ?>" class="bg-green-500 hover:bg-green-400 text-black font-semibold px-4 py-2 rounded-full flex items-center gap-1 text-lg transition-colors duration-200 flex-grow">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
+                                    </svg>
+                                    Xem ngay
+                                </a>
                                     <button class="bg-gray-800 hover:bg-gray-700 border border-gray-600 p-2 rounded-full text-lg flex items-center justify-center w-10 h-10 transition-colors duration-200 flex-grow">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
                                             <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
@@ -206,142 +210,7 @@
 
 
 
-    <!-- Phim Mới -->
-    <section class="px-8 mt-6">
-        <h2 class="text-2xl font-bold mb-6 text-white">Phim Mới</h2>
-        <div class="movie-carousel overflow-visible relative">
-            
-            <!-- Left arrow button -->
-            <button class="absolute top-1/2 left-0 transform -translate-y-1/2 bg-gray-800 text-white px-3 py-3 rounded-full opacity-60 hover:opacity-100 z-20 shadow-lg transition-all duration-300" id="prev-btn">
-                <i class="fas fa-chevron-left"></i>
-            </button>
-
-            <!-- Movie Cards -->
-            <div class="movie-grid flex gap-6 pb-16 pt-8 px-4 overflow-x-auto scroll-smooth" id="movie-grid">
-                <?php foreach ($newMovies as $movie): ?>
-                    <div class="relative flex-shrink-0 group w-[290px]">
-                        <!-- Movie container -->
-                        <div class="relative rounded-lg shadow-lg bg-[#1e1e2d] transition-all duration-300 w-full">
-                            
-                            <!-- Poster -->
-                            <img 
-                                src="https://image.tmdb.org/t/p/w300<?= $movie['poster_path'] ?>" 
-                                alt="<?= $movie['title'] ?>" 
-                                class="w-full h-[390px] object-cover rounded-lg"
-                                loading="lazy"
-                            >
-
-                            <!-- Rating Badge -->
-                            <div class="absolute top-2 right-2 bg-yellow-500 text-black font-bold px-2 py-1 rounded-full text-xs flex items-center">
-                                <span class="mr-1">★</span> <?= $movie['vote_average'] ?>
-                            </div>
-
-                            <!-- Hover Overlay -->
-                            <div class="absolute opacity-0 group-hover:opacity-100 transition-all duration-300 bg-gradient-to-t from-black via-[#1e1e2de9] to-[#1e1e2dcc] rounded-lg flex flex-col pointer-events-none group-hover:pointer-events-auto z-50 w-[380px] -left-[30px] -top-[10px] h-[450px]">
-                                <img 
-                                    src="https://image.tmdb.org/t/p/w500<?= $movie['backdrop_path'] ?>" 
-                                    alt="<?= $movie['title'] ?>" 
-                                    class="w-full h-[160px] object-cover rounded-t-lg"
-                                    loading="lazy"
-                                >
-
-                                <div class="p-4 flex-1 flex flex-col justify-between text-white">
-                                    <div>
-                                        <h3 class="font-bold text-lg mb-1 line-clamp-2"><?= $movie['title'] ?></h3>
-                                        <p class="text-gray-300 text-xs mb-3 italic"><?= $movie['original_title'] ?></p>
-                                        <div class="flex flex-wrap gap-2 text-xs mb-3">
-                                            <span class="bg-gray-700 px-2 py-0.5 rounded"><?= $movie['release_year'] ?? 'N/A' ?></span>
-                                            <span class="bg-gray-700 px-2 py-0.5 rounded"><?= $movie['genres'] ?? 'Chưa rõ thể loại' ?></span>
-                                        </div>
-                                    </div>
-
-                                    <div class="flex gap-2 mt-2">
-                                        <button class="bg-green-500 hover:bg-green-400 text-black font-semibold px-4 py-2 rounded-full flex items-center gap-1 text-lg transition-colors duration-200 flex-grow">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
-                                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clip-rule="evenodd" />
-                                            </svg>
-                                            Xem ngay
-                                        </button>
-                                        <button class="bg-gray-800 hover:bg-gray-700 border border-gray-600 p-2 rounded-full text-lg flex items-center justify-center w-10 h-10 transition-colors duration-200 flex-grow">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
-                                                <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
-                                            </svg>
-                                            Thích
-                                        </button>
-                                        <button class="bg-gray-800 hover:bg-gray-700 border border-gray-600 p-2 rounded-full text-sm flex items-center justify-center w-10 h-10 transition-colors duration-200">
-                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
-                                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
-                                            </svg>
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-
-            <!-- Right arrow button -->
-            <button class="absolute top-1/2 right-0 transform -translate-y-1/2 bg-gray-800 text-white px-3 py-3 rounded-full opacity-60 hover:opacity-100 z-20 shadow-lg transition-all duration-300" id="next-btn">
-                <i class="fas fa-chevron-right"></i>
-            </button>
-
-        </div>
-    </section>
-
-    <!-- Phim Sắp Chiếu -->
-    <section class="px-8 mt-6">
-        <h2 class="text-2xl font-bold mb-6 text-white">Phim Sắp Chiếu</h2>
-        <div class="movie-carousel overflow-visible relative">
-            <button class="absolute top-1/2 left-0 transform -translate-y-1/2 bg-gray-800 text-white px-3 py-3 rounded-full opacity-60 hover:opacity-100 z-20 shadow-lg transition-all duration-300" id="prev-upcoming">
-                <i class="fas fa-chevron-left"></i>
-            </button>
-
-            <div class="movie-grid flex gap-6 pb-16 pt-8 px-4 overflow-x-auto scroll-smooth" id="upcoming-movie-grid">
-            <?php foreach ($upcomingMovies as $movie): ?>
-                <div class="relative flex-shrink-0 group w-[200px] py-6 px-3">
-                    <div class="relative rounded-lg shadow-lg bg-[#1e1e2d] transition-all duration-300 w-full">
-                        <img 
-                            src="https://image.tmdb.org/t/p/w300<?= $movie['poster_path'] ?>" 
-                            alt="<?= $movie['title'] ?>" 
-                            class="w-full h-[300px] object-cover rounded-lg"
-                            loading="lazy"
-                        >
-                        <div class="absolute top-2 right-2 bg-yellow-500 text-black font-bold px-2 py-1 rounded-full text-xs flex items-center">
-                            <span class="mr-1">★</span> <?= $movie['vote_average'] ?>
-                        </div>
-
-                        <div class="absolute opacity-0 group-hover:opacity-100 transition-all duration-300 
-                                bg-gradient-to-t from-black via-[#1e1e2de9] to-[#1e1e2dcc] 
-                                rounded-lg flex flex-col pointer-events-none
-                                group-hover:pointer-events-auto z-50
-                                w-[220px] -left-[10px] -top-[10px] h-[340px]">
-                            <img 
-                                src="https://image.tmdb.org/t/p/w500<?= $movie['backdrop_path'] ?>" 
-                                alt="<?= $movie['title'] ?>" 
-                                class="w-full h-[160px] object-cover rounded-t-lg"
-                                loading="lazy"
-                            >
-                            <div class="p-4 flex-1 flex flex-col justify-between text-white">
-                                <h3 class="font-bold text-lg mb-1 line-clamp-2"><?= $movie['title'] ?></h3>
-                                <p class="text-gray-300 text-xs mb-3 italic"><?= $movie['original_title'] ?></p>
-                                <div class="flex flex-wrap gap-2 text-xs mb-3">
-                                    <span class="bg-gray-700 px-2 py-0.5 rounded"><?= $movie['release_year'] ?? 'N/A' ?></span>
-                                    <span class="bg-gray-700 px-2 py-0.5 rounded"><?= $movie['genres'] ?? 'Chưa rõ thể loại' ?></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            <?php endforeach; ?>
-            </div>
-
-            <button class="absolute top-1/2 right-0 transform -translate-y-1/2 bg-gray-800 text-white px-3 py-3 rounded-full opacity-60 hover:opacity-100 z-20 shadow-lg transition-all duration-300" id="next-upcoming">
-                <i class="fas fa-chevron-right"></i>
-            </button>
-        </div>
-    </section>
-
+    
 
     <!-- Section: Celebrities -->
     <section class="px-8 mt-10">
@@ -362,46 +231,6 @@
         </div>
     </section>
                 
-    <!-- <script>
-        // Get elements
-        const prevBtn = document.getElementById('prev-btn');
-        const nextBtn = document.getElementById('next-btn');
-        const movieGrid = document.getElementById('movie-grid');
-        
-        // Define the number of movies per view
-        const moviesPerView = 6;
-        
-        let scrollAmount = 0;
-        
-        // Function to scroll the movie carousel
-        const scrollCarousel = (direction) => {
-            const totalMovies = movieGrid.children.length;
-            const movieWidth = movieGrid.children[0].offsetWidth + 24; // Gap between items
-            
-            // Calculate max scroll position
-            const maxScroll = (totalMovies - moviesPerView) * movieWidth;
-            
-            if (direction === 'next' && scrollAmount < maxScroll) {
-                scrollAmount += movieWidth * moviesPerView;
-            } else if (direction === 'prev' && scrollAmount > 0) {
-                scrollAmount -= movieWidth * moviesPerView;
-            }
-            
-            // Ensure scroll doesn't exceed boundaries
-            if (scrollAmount > maxScroll) {
-                scrollAmount = maxScroll;
-            } else if (scrollAmount < 0) {
-                scrollAmount = 0;
-            }
-            
-            // Scroll the movie grid
-            movieGrid.scrollLeft = scrollAmount;
-        };
-        
-        // Add event listeners for the buttons
-        prevBtn.addEventListener('click', () => scrollCarousel('prev'));
-        nextBtn.addEventListener('click', () => scrollCarousel('next'));
-    </script> -->
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
