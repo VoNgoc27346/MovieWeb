@@ -1,23 +1,46 @@
 <?php
+session_start();
 require_once 'controllers/MovieController.php';
+require_once 'controllers/CommentController.php'; 
+require_once 'controllers/UserController.php';    
 require_once 'models/MovieModel.php';
 
-// Bắt request
+
+// Bắt biến từ URL
 $controller = $_GET['controller'] ?? 'movie';
 $action = $_GET['action'] ?? 'index';
 $slug = $_GET['slug'] ?? '';
 
-if ($controller == 'movie') {
-    $movieController = new MovieController();
+switch ($controller) {
+    case 'movie':
+        $movieController = new MovieController();
+        if ($action == 'watch' && !empty($slug)) {
+            $movieController->watch($slug);
+        } else {
+            $movieController->index();
+        }
+        break;
 
-    if ($action == 'watch' && !empty($slug)) {
-        $movieController->watch($slug); // Nếu action là watch thì chỉ chạy watch
-    } else {
-        // Nếu không có yêu cầu gì, thì mặc định là vào trang chủ
-        //$movieController->fetchMoviesFromTMDB();
-        $movieController->index();
-    }
-} else {
-    echo "Controller không tồn tại!";
+    case 'comment':
+        $commentController = new CommentController();
+        if ($action == 'comment_post') {
+            $commentController->postComment();
+        }
+        break;
+
+    case 'user':
+        $userController = new UserController();
+        if ($action == 'login') {
+            $userController->login();
+        } elseif ($action == 'register') {
+            $userController->register();
+        } elseif ($action == 'logout') {
+            $userController->logout();
+        }
+        break;
+
+    default:
+        echo "Controller không tồn tại!";
+        break;
 }
 ?>
