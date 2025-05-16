@@ -1,3 +1,6 @@
+<?php
+require_once 'helpers.php';
+?>
 
 <!DOCTYPE html>
 <html lang="vi">
@@ -69,59 +72,50 @@
       <!-- Left Section - Video Player -->
       <div class="w-full lg:w-2/3">
         <!-- Video Player -->
-        <!-- <div class="bg-black relative aspect-video rounded-lg flex items-center justify-center overflow-hidden mb-6">
-          <img src="https://via.placeholder.com/1280x720" alt="Movie Thumbnail" class="w-full h-full object-cover opacity-50" />
-          <div class="absolute">
-            <button class="bg-green-600 hover:bg-green-700 text-white p-6 rounded-full flex items-center justify-center transform transition hover:scale-110">
-              <i class="fas fa-play text-3xl"></i>
-            </button>
-          </div>
-        </div> -->
-
         <div class="bg-black relative aspect-video rounded-lg flex items-center justify-center overflow-hidden mb-6">
-            <img src="https://via.placeholder.com/1280x720" alt="Movie Thumbnail" class="w-full h-full object-cover opacity-50" />
+          <img src="https://via.placeholder.com/1280x720" alt="Movie Thumbnail" class="w-full h-full object-cover opacity-50" />
             <div class="absolute">
-                <button class="bg-green-600 hover:bg-green-700 text-white p-6 rounded-full flex items-center justify-center transform transition hover:scale-110" onclick="openVideo('<?= $movie['video_url']; ?>')">
-                <i class="fas fa-play text-3xl"></i>
-                </button>
-            </div>
-            </div>
+              <button class="bg-green-600 hover:bg-green-700 text-white p-6 rounded-full flex items-center justify-center transform transition hover:scale-110" onclick="openVideo('<?= $movie['video_url']; ?>')">
+              <i class="fas fa-play text-3xl"></i>
+              </button>
+          </div>
+        </div>
 
-            <!-- Modal Video Display -->
-            <div id="videoModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-            <div class="relative w-full h-full max-w-3xl">
-                <button onclick="closeModal()" class="absolute top-2 right-2 text-white text-2xl">X</button>
-                <iframe id="videoIframe" width="100%" height="100%" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-            </div>
+        <!-- Modal Video Display -->
+        <div id="videoModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+          <div class="relative w-full h-full max-w-3xl">
+              <button onclick="closeModal()" class="absolute top-2 right-2 text-white text-2xl">X</button>
+              <iframe id="videoIframe" width="100%" height="100%" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+          </div>
         </div>
-        <!-- Title and Actions -->
-        <div class="mb-6">
-          <div class="flex flex-col md:flex-row md:items-center justify-between mb-2">
-            <h1 class="text-3xl font-bold"><?= $movie['title']; ?></h1>
-            <div class="flex items-center space-x-4 mt-2 md:mt-0">
-              <div class="flex items-center">
-                <i class="fas fa-star text-yellow-400 mr-1"></i>
-                <span class="text-lg font-semibold"><?= $movie['rating']; ?></span>
-                <span class="text-gray-400 text-sm ml-1">/10</span>
+          <!-- Title and Actions -->
+          <div class="mb-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between mb-2">
+              <h1 class="text-3xl font-bold"><?= $movie['title']; ?></h1>
+              <div class="flex items-center space-x-4 mt-2 md:mt-0">
+                <div class="flex items-center">
+                  <i class="fas fa-star text-yellow-400 mr-1"></i>
+                  <span class="text-lg font-semibold"><?= $movie['rating']; ?></span>
+                  <span class="text-gray-400 text-sm ml-1">/10</span>
+                </div>
+                <button class="p-2 rounded-full hover:bg-gray-700">
+                  <i class="fas fa-share-alt"></i>
+                </button>
+                <button class="p-2 rounded-full hover:bg-gray-700">
+                  <i class="fas fa-bookmark"></i>
+                </button>
               </div>
-              <button class="p-2 rounded-full hover:bg-gray-700">
-                <i class="fas fa-share-alt"></i>
-              </button>
-              <button class="p-2 rounded-full hover:bg-gray-700">
-                <i class="fas fa-bookmark"></i>
-              </button>
+            </div>
+            
+            <div class="flex flex-wrap gap-2 mb-2">
+              <span class="bg-green-700 px-3 py-1 rounded-full text-sm"><?= $movie['release_year']; ?></span>
+              <span class="bg-gray-700 px-3 py-1 rounded-full text-sm">Hành động</span>
+              <span class="bg-gray-700 px-3 py-1 rounded-full text-sm">Kịch tính</span>
+              <span class="bg-gray-700 px-3 py-1 rounded-full text-sm">Sinh tồn</span>
+              <span class="bg-gray-700 px-3 py-1 rounded-full text-sm">45-60 phút/tập</span>
             </div>
           </div>
-          
-          <div class="flex flex-wrap gap-2 mb-2">
-            <span class="bg-green-700 px-3 py-1 rounded-full text-sm"><?= $movie['release_year']; ?></span>
-            <span class="bg-gray-700 px-3 py-1 rounded-full text-sm">Hành động</span>
-            <span class="bg-gray-700 px-3 py-1 rounded-full text-sm">Kịch tính</span>
-            <span class="bg-gray-700 px-3 py-1 rounded-full text-sm">Sinh tồn</span>
-            <span class="bg-gray-700 px-3 py-1 rounded-full text-sm">45-60 phút/tập</span>
-          </div>
-        </div>
-        
+      
         <!-- Tab Navigation -->
         <div class="border-b border-gray-700 mb-6">
           <div class="flex space-x-6">
@@ -191,91 +185,120 @@
               <img src="uploads/default-avatar.png" alt="User Avatar" class="w-full h-full object-cover" />
             </div>
             <div class="ml-3 flex-grow">
-              <form method="post" action="index.php?action=comment_post">
-                <input type="hidden" name="user_id" value="1"> <!-- Giả lập user -->
-                <input type="hidden" name="movie_id" value="<?= $movie_id ?>">
-                <input type="hidden" name="episode_id" value="<?= $episode_id ?? '' ?>">
-                <div class="bg-gray-800 rounded-lg p-3">
-                  <textarea 
-                    name="content"
-                    placeholder="Viết bình luận..." 
-                    class="w-full bg-transparent focus:outline-none resize-none"
-                    rows="2"
-                    required
-                  ></textarea>
+
+              <!-- Hiển thị thông báo -->
+              <?php if ($msg = getFlash('success')): ?>
+                <div class="text-green-500"><?= $msg ?></div>
+              <?php endif; ?>
+              <?php if ($msg = getFlash('error')): ?>
+                <div class="text-red-500"><?= $msg ?></div>
+              <?php endif; ?>
+              <?php if (isLoggedIn()): ?>
+                <form method="post" action="index.php?controller=comment&action=comment_post">
+                  <input type="hidden" name="user_id" value="<?= $_SESSION['user_id'] ?>">
+                  <input type="hidden" name="movie_id" value="<?= $movie['movie_id'] ?>">
+                  <input type="hidden" name="episode_id" value="<?= $episode_id ?? '' ?>">
+                  <div class="bg-gray-800 rounded-lg p-3">
+                    <textarea 
+                      name="content"
+                      placeholder="Viết bình luận..." 
+                      class="w-full bg-transparent focus:outline-none resize-none"
+                      rows="2"
+                      required
+                    ></textarea>
+                  </div>
+                  <div class="flex justify-end mt-2">
+                    <button type="submit" class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-md flex items-center">
+                      <i class="fas fa-paper-plane mr-2"></i>
+                      Gửi
+                    </button>
+                  </div>
+                </form>
+              <?php else: ?>
+                <div class="bg-gray-800 rounded-lg p-4 text-center">
+                  <p class="mb-2">Vui lòng đăng nhập để bình luận</p>
+                  <a href="index.php?controller=user&action=login" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-md inline-block">Đăng nhập</a>
                 </div>
-                <div class="flex justify-end mt-2">
-                  <button type="submit" class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-md flex items-center">
-                    <i class="fas fa-paper-plane mr-2"></i>
-                    Gửi
-                  </button>
-                </div>
-              </form>
+              <?php endif; ?>
             </div>
           </div>
 
-          <!-- Comment List -->
-          <div class="space-y-6">
-            <?php foreach ($comments as $c): ?>
-              <div class="flex">
-                <div class="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
-                  <img src="uploads/default-avatar.png" alt="<?= htmlspecialchars($c['username']) ?> Avatar" class="w-full h-full object-cover" />
-                </div>
-                <div class="ml-3 flex-grow">
-                  <div class="flex items-center">
-                    <h3 class="font-semibold"><?= htmlspecialchars($c['username']) ?></h3>
-                    <span class="ml-2 text-xs text-gray-400"><?= $c['created_at'] ?></span>
-                  </div>
-                  <p class="text-gray-300 mt-1"><?= nl2br(htmlspecialchars($c['content'])) ?></p>
-                  <div class="mt-2 flex items-center text-gray-400 text-sm">
-                    <button class="flex items-center hover:text-white">
-                      <i class="fas fa-thumbs-up mr-1"></i>
-                      0
-                    </button>
-                    <button class="ml-4 hover:text-white" onclick="toggleReplyForm(<?= $c['comment_id'] ?>)">
-                      Trả lời
-                    </button>
-                  </div>
 
-                  <!-- Reply Form -->
-                  <form method="post" action="index.php?action=comment_post" class="reply-form mt-2 hidden" id="reply-form-<?= $c['comment_id'] ?>">
-                    <input type="hidden" name="user_id" value="1">
-                    <input type="hidden" name="movie_id" value="<?= $movie_id ?>">
-                    <input type="hidden" name="episode_id" value="<?= $episode_id ?? '' ?>">
-                    <input type="hidden" name="parent_id" value="<?= $c['comment_id'] ?>">
-                    <textarea name="content" placeholder="Viết trả lời..." rows="1" class="w-full bg-gray-700 rounded-md p-2 mt-2 text-sm text-white" required></textarea>
-                    <div class="flex justify-end mt-1">
-                      <button type="submit" class="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded-md text-sm flex items-center">
-                        <i class="fas fa-reply mr-1"></i> Gửi
+          <?php if ($msg = getFlash('success')): ?>
+              <div class="alert alert-success"><?= $msg ?></div>
+          <?php endif; ?>
+
+          <?php if ($msg = getFlash('error')): ?>
+              <div class="alert alert-danger"><?= $msg ?></div>
+          <?php endif; ?>
+          
+          <!-- Comment List -->
+          <?php if (!empty($comments) && is_array($comments)): ?>
+            
+            <?php foreach ($comments as $c): ?>
+              <div class="space-y-6">
+                <div class="flex">
+                  <div class="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
+                    <img src="uploads/default-avatar.png" alt="<?= htmlspecialchars($c['username']) ?> Avatar" class="w-full h-full object-cover" />
+                  </div>
+                  <div class="ml-3 flex-grow">
+                    <div class="flex items-center">
+                      <h3 class="font-semibold"><?= htmlspecialchars($c['username']) ?></h3>
+                      <span class="ml-2 text-xs text-gray-400"><?= $c['created_at'] ?></span>
+                    </div>
+                    <p class="text-gray-300 mt-1"><?= nl2br(htmlspecialchars($c['content'])) ?></p>
+                    <div class="mt-2 flex items-center text-gray-400 text-sm">
+                      <button class="flex items-center hover:text-white">
+                        <i class="fas fa-thumbs-up mr-1"></i>
+                        0
+                      </button>
+                      <button class="ml-4 hover:text-white" onclick="toggleReplyForm(<?= $c['comment_id'] ?>)">
+                        Trả lời
                       </button>
                     </div>
-                  </form>
 
-                  <!-- Reply List -->
-                  <?php
-                  $replies = Comment::getReplies($c['comment_id']);
-                  foreach ($replies as $r):
-                  ?>
-                    <div class="flex mt-4 ml-10">
-                      <div class="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
-                        <img src="uploads/default-avatar.png" alt="<?= htmlspecialchars($r['username']) ?> Avatar" class="w-full h-full object-cover" />
+                    <!-- Reply Form -->
+                    <form method="post" action="index.php?controller=comment&action=comment_post" class="reply-form mt-2 hidden" id="reply-form-<?= $c['comment_id'] ?>">
+                      <input type="hidden" name="user_id" value="1">
+                      <input type="hidden" name="movie_id" value="<?= $movie['movie_id'] ?>">
+                      <input type="hidden" name="episode_id" value="<?= $episode_id ?? '' ?>">
+                      <input type="hidden" name="parent_id" value="<?= $c['comment_id'] ?>">
+                      <textarea name="content" placeholder="Viết trả lời..." rows="1" class="w-full bg-gray-700 rounded-md p-2 mt-2 text-sm text-white" required></textarea>
+                      <div class="flex justify-end mt-1">
+                        <button type="submit" class="bg-blue-600 hover:bg-blue-700 px-3 py-1 rounded-md text-sm flex items-center">
+                          <i class="fas fa-reply mr-1"></i> Gửi
+                        </button>
                       </div>
-                      <div class="ml-3 flex-grow">
-                        <div class="flex items-center">
-                          <h4 class="font-semibold text-sm"><?= htmlspecialchars($r['username']) ?></h4>
-                          <span class="ml-2 text-xs text-gray-400"><?= $r['created_at'] ?></span>
+                    </form>
+
+                    <!-- Reply List -->
+                    <?php
+                    $replies = Comment::getReplies($c['comment_id']);
+                    foreach ($replies as $r):
+                    ?>
+                      <div class="flex mt-4 ml-10">
+                        <div class="w-8 h-8 rounded-full overflow-hidden flex-shrink-0">
+                          <img src="uploads/default-avatar.png" alt="<?= htmlspecialchars($r['username']) ?> Avatar" class="w-full h-full object-cover" />
                         </div>
-                        <p class="text-gray-300 text-sm mt-1"><?= nl2br(htmlspecialchars($r['content'])) ?></p>
+                        <div class="ml-3 flex-grow">
+                          <div class="flex items-center">
+                            <h4 class="font-semibold text-sm"><?= htmlspecialchars($r['username']) ?></h4>
+                            <span class="ml-2 text-xs text-gray-400"><?= $r['created_at'] ?></span>
+                          </div>
+                          <p class="text-gray-300 text-sm mt-1"><?= nl2br(htmlspecialchars($r['content'])) ?></p>
+                        </div>
                       </div>
-                    </div>
-                  <?php endforeach; ?>
+                    <?php endforeach; ?>
 
+                  </div>
                 </div>
               </div>
             <?php endforeach; ?>
-          </div>
+          <?php else: ?>
+              <p>Chưa có bình luận nào.</p>
+          <?php endif; ?>
+        </div>
       </div>
-      
       <!-- Right Section - Episodes or Related Movies -->
       <div class="w-full lg:w-1/3">
         <div class="bg-gray-800 rounded-lg p-4">

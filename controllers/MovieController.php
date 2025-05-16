@@ -1,19 +1,21 @@
 <?php
 
 require_once 'models/MovieModel.php';
+require_once 'models/Comment.php';
 
 
 
 class MovieController {
 
     private $movieModel;
+    private $commentModel;
 
     private function render($viewPath, $data = [])
     {
         extract($data); // chuyển mảng thành biến
         require_once 'views/' . $viewPath . '.php';
     }
-
+    
 
     public function index() {
         $apiKey = '9be884418bf4e79829b5014c71b06b52';
@@ -51,6 +53,7 @@ class MovieController {
 
     public function __construct() {
         $this->movieModel = new MovieModel();
+        $this->commentModel = new Comment();
     }
 
     public function fetchMoviesFromTMDB() {
@@ -130,17 +133,27 @@ class MovieController {
     }
 
     public function watch($slug) {
-        // Tìm phim theo slug trong database
+        // Tìm phim theo slug
         $movie = $this->movieModel->getMovieBySlug($slug);
-    
-        if ($movie) {
-            // Gửi biến $movie vào view
-            $this->render('movies/watch', ['movie' => $movie]);
+
+        if ($movie && isset($movie['movie_id'])) {
+            $movie_id = (int)$movie['movie_id'];
+            $comments = $this->getComments($movie_id);
+
+            $this->render('movies/watch', [
+                'movie' => $movie,
+                'comments' => $comments
+            ]);
         } else {
-            echo "Phim không tồn tại!";
+            echo "Phim không tồn tại hoặc thiếu ID.";
         }
     }
+
     
+
+    public function getComments($movie_id, $episode_id = null) {
+        return $this->commentModel->getComments($movie_id, $episode_id);
+    }
 
     public function popularMovies()
     {
@@ -149,6 +162,26 @@ class MovieController {
 
         // Truyền biến $movies vào View
         require_once 'views/movies/home.php';
+    }
+
+    public function show($movie_id, $episode_id = null) {
+        $movie = $this->movieModel->getMovieById($movie_id);
+        // Lấy thông tin phim, tập phim, ...
+        
+        // Lấy danh sách bình luận
+        $comments = $this->getComments($movie_id, $episode_id);
+
+        
+        // Render view với dữ liệu bình luận
+        $data = [
+            'movie' => $movie,
+            'episode' => $episode ?? null,
+            'comments' => $comments,
+            // Các dữ liệu khác...
+        ];
+        
+        $this->render('movie/detail', $data);
+
     }
 }
     
