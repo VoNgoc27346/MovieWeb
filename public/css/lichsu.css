@@ -1,0 +1,172 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    color: #fff;
+    background-color: #2C2C2C; /* Màu nền tối cho phần dưới */
+		opacity: 0.8
+}
+
+/* Container cho background cờ */
+.flag-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50vh; /* Chỉ hiển thị phân nửa chiều cao màn hình */
+    background: url('assets/flag_vn.jpg') no-repeat center top; /* Căn giữa và đặt ở trên cùng */
+    background-size: cover; /* Lấp đầy chiều ngang, giữ tỷ lệ */
+    background-position: center 40%; /* Điều chỉnh để ngôi sao nằm ở giữa khu vực hiển thị */
+    z-index: -1; /* Đặt phía sau nội dung */
+	overflow: hidden;
+
+}
+
+/* Nội dung chính */
+.main-content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.3) 0%, /* Mờ nhẹ ở trên để cờ vẫn hiển thị rõ */
+        rgba(0, 0, 0, 1) 50%, /* Tăng độ mờ đen ở giữa */
+        rgba(0, 0, 0, 1) 100% /* Mờ đen hoàn toàn ở dưới */
+    ); /* Hiệu ứng mờ đen từ trên xuống dưới */
+    backdrop-filter: blur(1px); /* Hiệu ứng mờ nền */
+    padding: 0px;
+    width: 100%;
+   
+    margin: 0 auto;
+	
+	
+}
+
+/* Container chính chứa hình ảnh và nội dung văn bản */
+.celebration-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 1300px;
+    margin: 0 auto;
+    gap: 10px;
+}
+
+/* Phần hình ảnh bên trái */
+.image-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.heart-frame {
+    position: relative;
+    width: 300px;
+    height: 400px;
+    background: url('assets/heart-frame.png') no-repeat center center; /* Thay bằng hình trái tim nếu có */
+    background-size: contain;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ho-chi-minh {
+    position: absolute;
+    top: 50px;
+    width: 280px;
+    height: auto;
+    z-index: 1;
+	transform: rotate(-8deg)
+}
+
+
+
+/* Phần văn bản bên phải */
+.text-section {
+    flex: 2;
+    padding: 20px;
+	font-weight: 300;
+}
+
+.text-section h3 {
+    font-size: 1.5em;
+    color: white;
+    margin-bottom: 10px;
+}
+
+.text-section h2 {
+    font-size: 1.5em;
+    color: #ffd700;
+    margin-bottom: 20px;
+}
+
+.text-section p {
+    font-size: 15px;
+    line-height: 1.8;
+    margin-bottom: 15px;
+    color:#d3d3d3;
+	
+}
+
+/* Phần Phim Lịch Sử */
+.history-movies {
+    margin-top: 40px;
+    width: 100%;
+    max-width: 1200px;
+}
+
+.history-movies h3 {
+    font-size: 1.5em;
+    color: #ffd700;
+    margin-bottom: 20px;
+}
+
+.movie-list {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 20px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .flag-background {
+        height: 30vh; /* Giảm chiều cao cờ trên màn hình nhỏ */
+        background-position: center 10%; /* Điều chỉnh để ngôi sao vẫn ở giữa */
+    }
+
+    .celebration-container {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .image-section {
+        margin-bottom: 20px;
+    }
+
+    .heart-frame {
+        width: 250px;
+        height: 350px;
+    }
+
+    .ho-chi-minh {
+        top: 40px;
+        width: 150px;
+    }
+
+    .text-section h1 {
+        font-size: 1.5em;
+    }
+
+    .text-section h2 {
+        font-size: 1.2em;
+    }
+
+    .text-section p {
+        font-size: 0.9em;
+    }
+}

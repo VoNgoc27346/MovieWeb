@@ -4,7 +4,8 @@ require_once 'controllers/MovieController.php';
 require_once 'controllers/CommentController.php'; 
 require_once 'controllers/UserController.php';    
 require_once 'models/MovieModel.php';
-
+require_once 'controllers/ProductController.php'; // Thêm ProductController
+require_once 'models/ProductModel.php';          // Thêm ProductModel
 
 // Bắt biến từ URL
 $controller = $_GET['controller'] ?? 'movie';
@@ -36,6 +37,17 @@ switch ($controller) {
             $userController->register();
         } elseif ($action == 'logout') {
             $userController->logout();
+        }
+        break;
+
+    case 'product':
+        $productController = new ProductController();
+        if ($action == 'list') {
+            $productController->list();
+        } elseif ($action == 'detail' && !empty($slug)) {
+            $productController->detail($slug);
+        } else {
+            $productController->list(); // Mặc định hiển thị danh sách
         }
         break;
 

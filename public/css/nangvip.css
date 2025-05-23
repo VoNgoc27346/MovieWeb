@@ -1,0 +1,351 @@
+/* public/css/nangVip.css */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #17171e;
+    color: #d3d3d3;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.vip-header {
+    margin-bottom: 40px;
+    text-align: center;
+}
+
+.vip-header h1 {
+    font-size: 2.5rem;
+    color: #ffd700;
+    margin-bottom: 20px;
+}
+
+.vip-nav {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.vip-nav .nav-link {
+    padding: 10px 20px;
+    background-color: #222232;
+    color: #d3d3d3;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.vip-nav .nav-link:hover {
+    background-color: #ffd700;
+    color: #000;
+}
+
+.vip-nav .nav-link.active {
+    background-color: #ffd700;
+    color: #000;
+    font-weight: bold;
+}
+
+.alert {
+    padding: 15px;
+    margin-bottom: 30px;
+    border-radius: 5px;
+    color: #fff;
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+.alert-success {
+    background-color: #4CAF50;
+}
+
+.alert-danger {
+    background-color: #ff4444;
+}
+
+.pricing-section {
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.pricing-section h2 {
+    font-size: 2.2rem;
+    color: #fff;
+    margin-bottom: 30px;
+}
+
+.pricing-cards {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.pricing-card {
+    background-color: #222232;
+    padding: 30px;
+    border-radius: 10px;
+    width: 300px;
+    text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.pricing-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+}
+
+.pricing-card h3 {
+    font-size: 1.8rem;
+    color: #ffd700;
+    margin-bottom: 15px;
+}
+
+.pricing-card .price {
+    font-size: 1.5rem;
+    color: #4CAF50;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+.pricing-card ul {
+    list-style: none;
+    margin-bottom: 25px;
+}
+
+.pricing-card ul li {
+    margin-bottom: 12px;
+    font-size: 1rem;
+    color: #d3d3d3;
+}
+
+.pricing-card button {
+    background-color: #ffd700;
+    color: #000;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.pricing-card button:hover {
+    background-color: #e6c200;
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: #222232;
+    padding: 30px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 450px;
+    text-align: center;
+    color: #d3d3d3;
+    position: relative;
+}
+
+.modal-content h3 {
+    font-size: 1.8rem;
+    color: #ffd700;
+    margin-bottom: 20px;
+}
+
+.modal-content p {
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+}
+
+.modal-content .payment-methods {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.modal-content .payment-methods label {
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.modal-content .payment-methods input[type="radio"] {
+    accent-color: #ffd700;
+}
+
+.modal-content button {
+    padding: 12px 25px;
+    margin: 0 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: bold;
+}
+
+.modal-content .confirm-btn {
+    background-color: #4CAF50;
+    color: #fff;
+}
+
+.modal-content .confirm-btn:hover {
+    background-color: #45a049;
+}
+
+.modal-content .cancel-btn {
+    background-color: #ff4444;
+    color: #fff;
+}
+
+.modal-content .cancel-btn:hover {
+    background-color: #e03b3b;
+}
+
+.close-modal {
+    color: #aaa;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close-modal:hover {
+    color: #fff;
+}
+
+/* Phong cách cho giao diện giả lập thanh toán */
+.fake-payment {
+    background-color: #1c1c28;
+    padding: 40px;
+    border-radius: 15px;
+    text-align: center;
+    max-width: 600px;
+    margin: 50px auto;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+    border: 1px solid #ffd700;
+    position: relative;
+    overflow: hidden;
+}
+
+.fake-payment::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: linear-gradient(to right, #ffd700, #4CAF50);
+}
+
+.fake-payment h2 {
+    font-size: 2.2rem;
+    color: #ffd700;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.fake-payment p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    color: #e0e0e0;
+}
+
+.fake-payment .qr-code {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    margin: 20px 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    display: inline-block;
+}
+
+.fake-payment .qr-code p {
+    color: #333;
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+}
+
+.fake-payment .fake-qr-image {
+    max-width: 220px;
+    height: auto;
+    border: 3px solid #ffd700;
+    border-radius: 8px;
+    transition: transform 0.3s;
+}
+
+.fake-payment .fake-qr-image:hover {
+    transform: scale(1.05);
+}
+
+.fake-payment .payment-actions {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    margin-top: 30px;
+}
+
+.fake-payment .confirm-btn {
+    background: linear-gradient(135deg, #4CAF50, #2e7d32);
+    color: #fff;
+    padding: 14px 30px;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.fake-payment .confirm-btn:hover {
+    background: linear-gradient(135deg, #45a049, #2a6b2f);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}
+
+.fake-payment .cancel-btn {
+    background: linear-gradient(135deg, #ff4444, #d32f2f);
+    color: #fff;
+    padding: 14px 30px;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.fake-payment .cancel-btn:hover {
+    background: linear-gradient(135deg, #e03b3b, #c12727);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
+}

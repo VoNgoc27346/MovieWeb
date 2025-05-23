@@ -71,7 +71,7 @@ require_once 'helpers.php';
         <button class="w-9 h-9 bg-[#23252e] rounded-full flex items-center justify-center">
           <img src="https://ext.same-assets.com/3427629531/2457699613.png" alt="avatar" class="w-8 h-8 rounded-full" />
         </button>
-        <a href="#" class="bg-[#ffc345] text-black text-sm font-semibold rounded px-5 py-1.5 ml-2 hover:bg-[#ff8c00]">VIP</a>
+        <a href="../../../MovieWeb-main/views/movies/NangVip.php" class="bg-[#ffc345] text-black text-sm font-semibold rounded px-5 py-1.5 ml-2 mr-3 hover:bg-[#ff8c00]">VIP</a>
       </div>
       
       <div class="flex items-center ml-auto">

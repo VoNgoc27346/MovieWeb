@@ -1,0 +1,734 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    color: #fff;
+    background-color: #1a1a1a;
+}
+
+/* Container chung */
+.container {
+    max-width: 1520px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Header */
+.header {
+    background: rgba(0, 0, 0, 0);
+    backdrop-filter: blur(1px);
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    padding: 20px 0;
+}
+
+.header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+	height: 20%;
+	font-size: 13px
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo img {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+.logo span {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #ffd700;
+}
+
+.nav-menu ul {
+    display: flex;
+    list-style: none;
+}
+
+.nav-menu ul li {
+    margin: 0 15px;
+}
+
+.nav-menu ul li a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 1em;
+    transition: color 0.3s;
+}
+
+.nav-menu ul li a:hover {
+    color: #ffd700;
+}
+
+.header-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+    background: #333;
+    border-radius: 5px;
+    padding: 5px 10px;
+}
+
+.search-bar input {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1em;
+    padding: 5px;
+    outline: none;
+    width: 300px;
+}
+
+.search-bar button {
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.user-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-resource,
+.btn-user {
+    background: #444;
+    color: #fff;
+    padding: 8px 15px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-size: 0.9em;
+    transition: background 0.3s;
+}
+
+.btn-resource:hover,
+.btn-user:hover {
+    background: #ffd700;
+    color: #000;
+}
+
+/* Container cho background cờ */
+.flag-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 50vh;
+    background: url('assets/flag_vn.jpg') no-repeat center top;
+    background-size: cover;
+    background-position: center 20%;
+    z-index: -1;
+}
+
+.flag-background::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(192, 192, 192, 0.3);
+    z-index: 0;
+}
+
+/* Nội dung chính */
+.main-content {
+    position: relative;
+
+    min-height: 100vh;
+}
+
+.celebration-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 40px;
+}
+
+/* Phần hình ảnh bên trái */
+.image-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.heart-frame {
+    position: relative;
+    width: 300px;
+    height: 400px;
+    background: url('assets/heart-frame.png') no-repeat center center;
+    background-size: contain;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ho-chi-minh {
+    position: absolute;
+    top: 50px;
+    width: 200px;
+    height: auto;
+    z-index: 1;
+}
+
+.slogan {
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #ffd700;
+    margin-top: 20px;
+    line-height: 1.5;
+}
+
+/* Phần văn bản bên phải */
+.text-section {
+    flex: 2;
+    padding: 20px;
+}
+
+.text-section h1 {
+    font-size: 2em;
+    color: #ffd700;
+    margin-bottom: 10px;
+}
+
+.text-section h2 {
+    font-size: 1.5em;
+    color: #ffd700;
+    margin-bottom: 20px;
+}
+
+.text-section p {
+    font-size: 1em;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    color: #ccc;
+}
+
+.buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+/* Banner chính */
+.banner {
+    position: relative;
+    height: 600px;
+    margin-bottom: 40px;
+}
+
+.banner-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+	opacity: 0.5;
+    background: 
+        /* Gradient mờ đen từ trái sang phải */
+        linear-gradient(
+            to right,
+            rgba(0, 0, 0, 0.5) 0%, /* Mờ đen hoàn toàn ở cạnh trái */
+            rgba(0, 0, 0, 1) 50%, /* Trong suốt ở giữa */
+            rgba(0, 0, 0, 1) 100% /* Mờ đen hoàn toàn ở cạnh phải */
+        ),
+        /* Gradient mờ đen từ trên xuống dưới */
+        linear-gradient(
+            to bottom,
+            rgba(0, 0, 0, 0.3) 0%, /* Trong suốt ở trên cùng */
+            rgba(0, 0, 0, 1) 50%, /* Tăng độ mờ ở giữa */
+            rgba(0, 0, 0, 1) 100% /* Mờ đen hoàn toàn ở dưới cùng */
+        ),
+		linear-gradient(
+            to left,
+            rgba(0, 0, 0, 0.2) 0%, /* Mờ đen hoàn toàn ở cạnh trái */
+            rgba(0, 0, 0, 0.5) 25%, /* Giảm độ mờ ở 25% */
+            rgba(0, 0, 0, 0.7) 50%, /* Trong suốt ở giữa */
+            rgba(0, 0, 0, 0.8) 75%, /* Tăng độ mờ ở 75% */
+            rgba(0, 0, 0, 1) 100% /* Mờ đen hoàn toàn ở cạnh phải */
+        ),
+
+}
+
+.banner-content {
+    position: relative;
+    max-width: 1500px;
+    margin: 0 auto;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 40px 20px;
+}
+
+.banner-info {
+    max-width: 100%;
+}
+
+.banner-info h1 {
+    font-size: 3em;
+    font-weight: bold;
+	padding-top: 100px;
+    margin-bottom: 20px;
+   
+}
+
+.banner-meta {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.banner-meta span {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.7em;
+	align-content: center;
+	text-align: center;
+}
+
+.imdb {
+    background: #f5c518 !important;
+    color: #000 !important;
+    font-weight: bold;
+	width: 80px;
+	height: auto;
+}
+
+.age-rating {
+    background: #ff0000 !important;
+    color: #fff !important;
+}
+.season , .episode{
+	
+	width: 70px
+}
+
+.description {
+    font-size: 1em;
+    line-height: 1.6;
+    color: #ccc;
+    margin-bottom: 20px;
+	font-weight: 300
+}
+
+.banner-buttons {
+
+    gap: 30px;
+}
+.colaps-heart-info{
+	margin-left: 20px;
+	border-radius: 20px;
+	border: 1px solid rgba(117,117,117,1.00);
+	padding: 15px 0;	
+	font-size: 1em;
+	cursor: pointer;
+	align-content: center;
+	
+}
+.play-btn
+{
+	background: rgba(247,246,110,1.00);
+    border: none;
+ 
+    padding: 25px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background 0.3s;
+}
+.fa-play{
+	   color: #000000;
+	font-size: 25px
+}
+
+.colaps-heart-info:hover{
+	border:2px solid white 
+}
+.heart-btn,.info-btn{
+	background-color: transparent;
+			padding: 15px 30px;
+
+}
+.info-btn{
+	border-left: 1px solid rgba(117,117,117,1.00)
+}
+
+.play-btn:hover
+{
+    background: #ffd700;
+    color: #000;
+	box-shadow: 0 5px 10px 10px rgba(255, 218, 125, .15);
+	transition: all .3s ease 0s;
+}
+.fa-heart:hover,
+.fa-info-circle:hover {
+	
+	 color: #ffd700;
+
+}
+
+/* Phần Bạn Đang Quan Tâm Gì */
+.interested-section {
+    margin-top: 40px;
+    max-width: 1200px;
+    margin: 40px auto;
+}
+
+.interested-section h3 {
+    font-size: 1.5em;
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+.categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.category {
+    flex: 1 1 calc(16.66% - 15px);
+    background: #6c5ce7;
+    padding: 15px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.category span {
+    font-size: 1em;
+    font-weight: bold;
+}
+
+.category a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 0.9em;
+}
+
+.category a:hover {
+    text-decoration: underline;
+}
+
+.more-categories {
+    display: block;
+    margin-top: 15px;
+    color: #ffd700;
+    text-decoration: none;
+    font-size: 0.9em;
+}
+
+.more-categories:hover {
+    text-decoration: underline;
+}
+
+/* Phần Phim Lịch Sử */
+.history-movies {
+    margin-top: 40px;
+    max-width: 1200px;
+    margin: 40px auto;
+}
+
+.history-movies h3 {
+    font-size: 1.5em;
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+.movie-list {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding-bottom: 20px;
+    scrollbar-width: none;
+}
+
+.movie-list::-webkit-scrollbar {
+    display: none;
+}
+
+.movie-item {
+    flex: 0 0 auto;
+    width: 200px;
+    text-align: center;
+    position: relative;
+}
+
+.movie-item img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 10px;
+    transition: transform 0.3s;
+}
+
+.movie-item img:hover {
+    transform: scale(1.05);
+}
+
+.play-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 20px;
+    text-decoration: none;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.movie-item:hover .play-overlay {
+    opacity: 1;
+}
+
+.movie-item h4 {
+    margin-top: 10px;
+    font-size: 1em;
+    color: #fff;
+}
+
+/* Footer */
+.footer {
+    background: #111;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.footer p {
+    font-size: 0.9em;
+    color: #666;
+}
+
+/* Nút Đầu Trang */
+.scroll-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #444;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-size: 0.9em;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.scroll-top:hover {
+    background: #ffd700;
+    color: #000;
+}
+.banner-304 {
+	position: relative;
+    display: flex;
+    justify-content: space-between;
+    height: 350px;
+    background-color: #F7D8AA;
+    margin-top: 40px;
+   
+	    z-index: 10;
+	border-radius: 20px;
+}
+
+.banner-left {
+    position: relative;
+    width: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+	
+}
+
+.flag-gif {
+	position: absolute;
+	top: -55px;
+	left: 67px;
+    width: 250px;
+    height: auto;
+    z-index: 2;
+	transform: rotate(-23deg);
+}
+
+.person-img {
+    position: absolute;
+    bottom: 0;
+    left: 20px;
+	width: 350px;
+    z-index: 1;
+}
+
+.banner-center {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+	object-fit: cover;
+	overflow: hidden;
+}
+
+.bg-img {
+    position: absolute;
+    top: 0;
+    left: 0px;
+    width: 480px;
+    height: auto;
+    z-index: 0;
+    opacity: 0.4;
+	border-radius: 20px
+}
+
+.text-img {
+    max-width: 350px;
+    z-index: 2;
+    margin-top: 50px;
+}
+
+.btn-info {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: white;
+    color: black;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    z-index: 2;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    transition: background-color 0.3s ease;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+.btn-info:hover {
+    background-color: #ffd;
+}
+
+.banner-right {
+    width: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.next-btn {
+    background-color: #c41c1c;
+    color: white;
+    font-size: 30px;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.next-btn:hover {
+    background-color: #a01010;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .header-inner {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .nav-menu ul {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+    }
+
+    .search-bar input {
+        width: 150px;
+    }
+
+    .flag-background {
+        height: 30vh;
+        background-position: center 10%;
+    }
+
+    .celebration-container {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .image-section {
+        margin-bottom: 20px;
+    }
+
+    .heart-frame {
+        width: 250px;
+        height: 350px;
+    }
+
+    .ho-chi-minh {
+        top: 40px;
+        width: 150px;
+    }
+
+    .text-section h1 {
+        font-size: 1.5em;
+    }
+
+    .text-section h2 {
+        font-size: 1.2em;
+    }
+
+    .text-section p {
+        font-size: 0.9em;
+    }
+
+    .category {
+        flex: 1 1 calc(33.33% - 15px);
+    }
+
+    .movie-item {
+        width: 150px;
+    }
+
+    .movie-item img {
+        height: 225px;
+    }
+	
+}

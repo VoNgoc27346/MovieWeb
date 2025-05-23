@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: May 17, 2025 at 03:01 AM
--- Server version: 10.6.15-MariaDB
--- PHP Version: 8.0.30
+-- Máy chủ: 127.0.0.1
+-- Thời gian đã tạo: Th5 22, 2025 lúc 12:37 AM
+-- Phiên bản máy phục vụ: 10.4.32-MariaDB
+-- Phiên bản PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `movie_online`
+-- Cơ sở dữ liệu: `movie_online`
 --
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `actors`
+-- Cấu trúc bảng cho bảng `actors`
 --
 
 CREATE TABLE `actors` (
@@ -39,7 +39,7 @@ CREATE TABLE `actors` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `advertisements`
+-- Cấu trúc bảng cho bảng `advertisements`
 --
 
 CREATE TABLE `advertisements` (
@@ -58,7 +58,21 @@ CREATE TABLE `advertisements` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `comments`
+-- Cấu trúc bảng cho bảng `categories`
+--
+
+CREATE TABLE `categories` (
+  `category_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `description` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `comments`
 --
 
 CREATE TABLE `comments` (
@@ -72,7 +86,7 @@ CREATE TABLE `comments` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `comments`
+-- Đang đổ dữ liệu cho bảng `comments`
 --
 
 INSERT INTO `comments` (`comment_id`, `content`, `user_id`, `movie_id`, `episode_id`, `parent_id`, `created_at`) VALUES
@@ -85,7 +99,21 @@ INSERT INTO `comments` (`comment_id`, `content`, `user_id`, `movie_id`, `episode
 -- --------------------------------------------------------
 
 --
--- Table structure for table `countries`
+-- Cấu trúc bảng cho bảng `contents`
+--
+
+CREATE TABLE `contents` (
+  `content_id` int(11) NOT NULL,
+  `title` varchar(255) NOT NULL,
+  `content` text NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `countries`
 --
 
 CREATE TABLE `countries` (
@@ -96,7 +124,7 @@ CREATE TABLE `countries` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `countries`
+-- Đang đổ dữ liệu cho bảng `countries`
 --
 
 INSERT INTO `countries` (`country_id`, `name`, `slug`, `iso_code`) VALUES
@@ -119,7 +147,7 @@ INSERT INTO `countries` (`country_id`, `name`, `slug`, `iso_code`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `directors`
+-- Cấu trúc bảng cho bảng `directors`
 --
 
 CREATE TABLE `directors` (
@@ -134,7 +162,7 @@ CREATE TABLE `directors` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `episodes`
+-- Cấu trúc bảng cho bảng `episodes`
 --
 
 CREATE TABLE `episodes` (
@@ -151,7 +179,7 @@ CREATE TABLE `episodes` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `favorites`
+-- Cấu trúc bảng cho bảng `favorites`
 --
 
 CREATE TABLE `favorites` (
@@ -164,7 +192,7 @@ CREATE TABLE `favorites` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `genres`
+-- Cấu trúc bảng cho bảng `genres`
 --
 
 CREATE TABLE `genres` (
@@ -175,7 +203,7 @@ CREATE TABLE `genres` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `genres`
+-- Đang đổ dữ liệu cho bảng `genres`
 --
 
 INSERT INTO `genres` (`genre_id`, `name`, `description`, `slug`) VALUES
@@ -202,7 +230,7 @@ INSERT INTO `genres` (`genre_id`, `name`, `description`, `slug`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `movies`
+-- Cấu trúc bảng cho bảng `movies`
 --
 
 CREATE TABLE `movies` (
@@ -228,7 +256,7 @@ CREATE TABLE `movies` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `movies`
+-- Đang đổ dữ liệu cho bảng `movies`
 --
 
 INSERT INTO `movies` (`movie_id`, `title`, `original_title`, `slug`, `description`, `poster`, `background`, `trailer_url`, `video_url`, `release_year`, `duration`, `quality`, `views`, `rating`, `status`, `premium`, `country_id`, `created_at`, `updated_at`) VALUES
@@ -291,12 +319,13 @@ INSERT INTO `movies` (`movie_id`, `title`, `original_title`, `slug`, `descriptio
 (177, 'Vệ Binh Dải Ngân Hà 2', 'Guardians of the Galaxy Vol. 2', 'v-binh-d-i-ng-n-h-2', 'Guardians Of The Galaxy - Vệ binh dải ngân hà Phần 2 tiếp tục câu chuyện về bộ tứ huyền thoại của thiên hà. Lần này, cả nhóm sẽ bắt đầu cuộc phiêu lưu mới nhằm tìm ra bí ẩn thân thế của Star Lord – Peter Quill và viên Power Infinity Gem sở hữu sức mạnh vô song. Nhân vật anti-hero Yondu sẽ có vai trò quan trọng hơn nữa trong phần này, bên cạnh đó cô em gái Nebula của Gamora cũng sẽ trở lại.', 'https://image.tmdb.org/t/p/w500/bqemb9J8lAfYWdNXOPoK1JkHt3x.jpg', 'https://image.tmdb.org/t/p/w500/aJn9XeesqsrSLKcHfHP4u5985hn.jpg', 'https://www.youtube.com/watch?v=TgkvytwAO2I', NULL, 2017, 120, '0', 57451, 7.612, 'completed', 0, 1, '2025-04-26 13:29:56', '2025-04-26 13:29:56'),
 (178, 'Kẻ Hủy Diệt', 'The Terminator', 'k-h-y-di-t', 'Năm 2029, những kẻ cai trị Trái Đất quyết định gửi về quá khứ một robot sát thủ mang tên The Terminator - Kẻ Hủy Diệt để thay đổi quá khứ. Nhiệm vụ của tên robot này là giết chết Sarah Connor, người có vai trò quyết định trong cuộc kháng chiến của nhân loại sau này.', 'https://image.tmdb.org/t/p/w500/dFci3DJsm1hNZbhFJNJ5XvssE5v.jpg', 'https://image.tmdb.org/t/p/w500/ahUaAgnkFu7QlBh5h4LCNeaSurV.jpg', NULL, NULL, 1984, 120, '0', 34879, 7.664, 'completed', 0, 1, '2025-04-26 13:29:57', '2025-04-26 13:29:57'),
 (179, 'Deadpool và Wolverine', 'Deadpool & Wolverine', 'deadpool-v-wolverine', 'Wade Wilson, chán nản, đang cố gắng sống cuộc đời bình thường sau những ngày làm lính đánh thuê không mấy lương thiện, Deadpool. Nhưng khi quê hương của anh đứng trước nguy cơ diệt vong, Wade buộc phải khoác lại bộ đồ một lần nữa, cùng với một Wolverine còn miễn cưỡng hơn.', 'https://image.tmdb.org/t/p/w500/lfY2CfmxyN9OvxmFuap6aejViJn.jpg', 'https://image.tmdb.org/t/p/w500/by8z9Fe8y7p4jo2YlW2SZDnptyT.jpg', NULL, NULL, 2024, 120, '0', 40967, 7.6, 'completed', 0, 1, '2025-04-26 13:29:57', '2025-04-26 13:29:57'),
-(180, 'Venom: Kèo Cuối', 'Venom: The Last Dance', 'venom-k-o-cu-i', 'Đây là phần phim cuối cùng và hoành tráng nhất về cặp đôi Venom và Eddie Brock (Tom Hardy). Sau khi dịch chuyển từ Vũ trụ Marvel trong ‘Spider-man: No way home’ (2021) trở về thực tại, Eddie Brock giờ đây cùng Venom sẽ phải đối mặt với ác thần Knull hùng mạnh - kẻ tạo ra cả chủng tộc Symbiote và những thế lực đang rình rập khác. Cặp đôi Eddie và Venom sẽ phải đưa ra lựa quyết định khốc liệt để hạ màn kèo cuối này.', 'https://image.tmdb.org/t/p/w500/64hJDbJlLFJSRg4sG3njMCijIyF.jpg', 'https://image.tmdb.org/t/p/w500/3V4kLQg0kSqPLctI5ziYWabAZYF.jpg', NULL, NULL, 2024, 120, '0', 88096, 6.782, 'completed', 0, 1, '2025-04-26 13:29:58', '2025-04-26 13:29:58');
+(180, 'Venom: Kèo Cuối', 'Venom: The Last Dance', 'venom-k-o-cu-i', 'Đây là phần phim cuối cùng và hoành tráng nhất về cặp đôi Venom và Eddie Brock (Tom Hardy). Sau khi dịch chuyển từ Vũ trụ Marvel trong ‘Spider-man: No way home’ (2021) trở về thực tại, Eddie Brock giờ đây cùng Venom sẽ phải đối mặt với ác thần Knull hùng mạnh - kẻ tạo ra cả chủng tộc Symbiote và những thế lực đang rình rập khác. Cặp đôi Eddie và Venom sẽ phải đưa ra lựa quyết định khốc liệt để hạ màn kèo cuối này.', 'https://image.tmdb.org/t/p/w500/64hJDbJlLFJSRg4sG3njMCijIyF.jpg', 'https://image.tmdb.org/t/p/w500/3V4kLQg0kSqPLctI5ziYWabAZYF.jpg', NULL, NULL, 2024, 120, '0', 88096, 6.782, 'completed', 0, 1, '2025-04-26 13:29:58', '2025-04-26 13:29:58'),
+(223, 'DORAEMON: NOBITA VÀ BẢN GIAO HƯỞNG ĐỊA CẦU', 'Doraemon: Nobita no chikyū shinfonī', 'doraemon-nobita-v-bn-giao-hng-a-cu', 'TÁC PHẨM KỶ NIỆM 90 NĂM FUJIKO F FUJIO Chuẩn bị cho buổi hòa nhạc ở trường, Nobita đang tập thổi sáo - nhạc cụ mà cậu dở tệ. Thích thú trước nốt \"No\" lạc quẻ của Nobita, Micca - cô bé bí ẩn đã mời Doraemon, Nobita cùng nhóm bạn đến \"Farre\" - Cung điện âm nhạc tọa lạc trên một hành tinh nơi âm nhạc sẽ hóa thành năng lượng. Nhằm cứu cung điện này, Micca đang tìm kiếm \"virtuoso\" - bậc thầy âm nhạc sẽ cùng mình biểu diễn! Với bảo bối thần kì \"chứng chỉ chuyên viên âm nhạc\", Doraemon và các bạn đã chọn nhạc cụ, cùng Micca hòa tấu, từng bước khôi phục cung điện. Tuy nhiên, một vật thể sống đáng sợ sẽ xóa số âm nhạc khỏi thế giới đang đến gần, Trái Đất đang rơi vào nguy hiểm... ! Liệu những người bạn nhỏ có thể cứu được \"tương lai âm nhạc\" và cả địa cầu này?', 'https://cdn2.tuoitre.vn/thumb_w/640/471584752817336320/2024/5/27/doraemon-va-ban-giao-huong-dia-cau-1716794248664441752435.jpg', NULL, 'https://www.youtube.com/watch?v=xQP3XKIr368&ab_channel=POPSKids', 'https://www.youtube.com/watch?v=3qlFLnpqtXM&t=6759s&ab_channel=POPSKids', 2021, 120, '720p', 0, 0, 'completed', 0, NULL, '2025-05-20 07:58:20', '2025-05-20 08:30:53');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `movie_actors`
+-- Cấu trúc bảng cho bảng `movie_actors`
 --
 
 CREATE TABLE `movie_actors` (
@@ -308,7 +337,7 @@ CREATE TABLE `movie_actors` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `movie_directors`
+-- Cấu trúc bảng cho bảng `movie_directors`
 --
 
 CREATE TABLE `movie_directors` (
@@ -319,7 +348,7 @@ CREATE TABLE `movie_directors` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `movie_genres`
+-- Cấu trúc bảng cho bảng `movie_genres`
 --
 
 CREATE TABLE `movie_genres` (
@@ -330,7 +359,7 @@ CREATE TABLE `movie_genres` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `notifications`
+-- Cấu trúc bảng cho bảng `notifications`
 --
 
 CREATE TABLE `notifications` (
@@ -345,7 +374,49 @@ CREATE TABLE `notifications` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `ratings`
+-- Cấu trúc bảng cho bảng `orders`
+--
+
+CREATE TABLE `orders` (
+  `order_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `package` varchar(50) NOT NULL,
+  `amount` int(11) NOT NULL,
+  `status` varchar(50) NOT NULL DEFAULT 'pending',
+  `order_date` date NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Đang đổ dữ liệu cho bảng `orders`
+--
+
+INSERT INTO `orders` (`order_id`, `user_id`, `package`, `amount`, `status`, `order_date`, `created_at`, `updated_at`) VALUES
+(1, 1, 'monthly', 50000, 'completed', '2025-05-22', '2025-05-21 20:27:05', '2025-05-21 20:27:05'),
+(2, 1, 'yearly', 500000, 'completed', '2025-05-22', '2025-05-21 20:27:09', '2025-05-21 20:27:09'),
+(3, 1, 'yearly', 500000, 'cancelled', '2025-05-22', '2025-05-21 21:03:20', '2025-05-21 21:03:31'),
+(4, 1, 'yearly', 500000, 'completed', '2025-05-22', '2025-05-21 21:15:19', '2025-05-21 21:37:44'),
+(5, 1, 'yearly', 500000, 'completed', '2025-05-22', '2025-05-21 21:17:19', '2025-05-21 21:37:42'),
+(6, 1, 'monthly', 50000, 'completed', '2025-05-22', '2025-05-21 21:21:21', '2025-05-21 21:37:41'),
+(7, 1, 'yearly', 500000, 'completed', '2025-05-22', '2025-05-21 21:24:18', '2025-05-21 21:37:39'),
+(8, 1, 'monthly', 50000, 'completed', '2025-05-22', '2025-05-21 21:26:08', '2025-05-21 21:37:38'),
+(9, 1, 'monthly', 50000, 'completed', '2025-05-22', '2025-05-21 21:29:18', '2025-05-21 21:37:37'),
+(10, 1, 'monthly', 50000, 'completed', '2025-05-22', '2025-05-21 21:35:03', '2025-05-21 21:35:07'),
+(11, 1, 'yearly', 500000, 'failed', '2025-05-22', '2025-05-21 21:35:59', '2025-05-21 21:36:01'),
+(12, 1, 'monthly', 50000, 'completed', '2025-05-22', '2025-05-21 21:36:09', '2025-05-21 21:36:11'),
+(13, 1, 'monthly', 50000, 'completed', '2025-05-22', '2025-05-21 21:37:07', '2025-05-21 21:37:08'),
+(14, 1, 'monthly', 50000, 'completed', '2025-05-22', '2025-05-21 21:39:52', '2025-05-21 21:40:03'),
+(15, 1, 'yearly', 500000, 'completed', '2025-05-22', '2025-05-21 21:40:36', '2025-05-21 21:40:38'),
+(16, 1, 'monthly', 50000, 'completed', '2025-05-22', '2025-05-21 21:41:36', '2025-05-21 21:41:38'),
+(17, 1, 'monthly', 50000, 'completed', '2025-05-22', '2025-05-21 21:43:26', '2025-05-21 21:43:28'),
+(18, 1, 'monthly', 50000, 'completed', '2025-05-22', '2025-05-21 21:44:36', '2025-05-21 21:44:38'),
+(19, 1, 'monthly', 50000, 'cancelled', '2025-05-22', '2025-05-21 21:49:50', '2025-05-21 21:52:25');
+
+-- --------------------------------------------------------
+
+--
+-- Cấu trúc bảng cho bảng `ratings`
 --
 
 CREATE TABLE `ratings` (
@@ -358,7 +429,7 @@ CREATE TABLE `ratings` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Triggers `ratings`
+-- Bẫy `ratings`
 --
 DELIMITER $$
 CREATE TRIGGER `update_movie_rating` AFTER INSERT ON `ratings` FOR EACH ROW BEGIN
@@ -380,7 +451,7 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
--- Table structure for table `subscriptions`
+-- Cấu trúc bảng cho bảng `subscriptions`
 --
 
 CREATE TABLE `subscriptions` (
@@ -398,7 +469,7 @@ CREATE TABLE `subscriptions` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `subscription_plans`
+-- Cấu trúc bảng cho bảng `subscription_plans`
 --
 
 CREATE TABLE `subscription_plans` (
@@ -411,7 +482,7 @@ CREATE TABLE `subscription_plans` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `subscription_plans`
+-- Đang đổ dữ liệu cho bảng `subscription_plans`
 --
 
 INSERT INTO `subscription_plans` (`plan_id`, `name`, `price`, `duration`, `description`, `features`) VALUES
@@ -422,7 +493,7 @@ INSERT INTO `subscription_plans` (`plan_id`, `name`, `price`, `duration`, `descr
 -- --------------------------------------------------------
 
 --
--- Table structure for table `users`
+-- Cấu trúc bảng cho bảng `users`
 --
 
 CREATE TABLE `users` (
@@ -436,21 +507,22 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `users`
+-- Đang đổ dữ liệu cho bảng `users`
 --
 
 INSERT INTO `users` (`user_id`, `username`, `email`, `password`, `role`, `created_at`, `updated_at`) VALUES
-(1, 'admin', 'admin@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin', '2025-04-26 10:15:10', '2025-04-26 10:15:10'),
+(1, 'admin', 'admin@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'premium', '2025-04-26 10:15:10', '2025-05-21 20:27:09'),
 (2, 'user1', 'user1@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'member', '2025-04-26 10:15:10', '2025-04-26 10:15:10'),
 (3, 'premium1', 'premium1@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'premium', '2025-04-26 10:15:10', '2025-04-26 10:15:10'),
 (4, 'testuser', '', '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92', 'member', '2025-05-15 08:20:03', '2025-05-15 08:20:03'),
 (5, 'testuser1', 'vd234@gmail.com', '$2y$10$dK/mcx/gwVJPW2H/hGXWbuxV8BuG/s1DVxXDwR/kbiLiWH/dx75FK', 'member', '2025-05-16 09:16:12', '2025-05-16 09:16:12'),
-(6, 'testuser2', 'ev234@gmail.com', '$2y$10$NslR/vVsxoFlVowwz6XjLOGqpNoI2Sud0S2lsU5j48VrQHvDtSTmK', 'member', '2025-05-16 10:15:55', '2025-05-16 10:15:55');
+(6, 'testuser2', 'ev234@gmail.com', '$2y$10$2KkweRkNHbx1OaX.bLxLk.0OkjpAZipO/KhB.gMtKUZ8ftgoxr8nC', 'member', '2025-05-16 10:15:55', '2025-05-20 08:44:33'),
+(7, 'lamtiethai', 'posi040805@gmail.com', '$2y$10$SXkABZvyidi4uMfWl.xXBefP/vJb5iqu/xoDE8WBsJ4qhWUZ8DSXa', 'member', '2025-05-20 08:45:42', '2025-05-20 08:54:16');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `watch_history`
+-- Cấu trúc bảng cho bảng `watch_history`
 --
 
 CREATE TABLE `watch_history` (
@@ -464,24 +536,30 @@ CREATE TABLE `watch_history` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Indexes for dumped tables
+-- Chỉ mục cho các bảng đã đổ
 --
 
 --
--- Indexes for table `actors`
+-- Chỉ mục cho bảng `actors`
 --
 ALTER TABLE `actors`
   ADD PRIMARY KEY (`actor_id`),
   ADD UNIQUE KEY `slug` (`slug`);
 
 --
--- Indexes for table `advertisements`
+-- Chỉ mục cho bảng `advertisements`
 --
 ALTER TABLE `advertisements`
   ADD PRIMARY KEY (`ad_id`);
 
 --
--- Indexes for table `comments`
+-- Chỉ mục cho bảng `categories`
+--
+ALTER TABLE `categories`
+  ADD PRIMARY KEY (`category_id`);
+
+--
+-- Chỉ mục cho bảng `comments`
 --
 ALTER TABLE `comments`
   ADD PRIMARY KEY (`comment_id`),
@@ -491,7 +569,13 @@ ALTER TABLE `comments`
   ADD KEY `parent_id` (`parent_id`);
 
 --
--- Indexes for table `countries`
+-- Chỉ mục cho bảng `contents`
+--
+ALTER TABLE `contents`
+  ADD PRIMARY KEY (`content_id`);
+
+--
+-- Chỉ mục cho bảng `countries`
 --
 ALTER TABLE `countries`
   ADD PRIMARY KEY (`country_id`),
@@ -499,21 +583,21 @@ ALTER TABLE `countries`
   ADD UNIQUE KEY `slug` (`slug`);
 
 --
--- Indexes for table `directors`
+-- Chỉ mục cho bảng `directors`
 --
 ALTER TABLE `directors`
   ADD PRIMARY KEY (`director_id`),
   ADD UNIQUE KEY `slug` (`slug`);
 
 --
--- Indexes for table `episodes`
+-- Chỉ mục cho bảng `episodes`
 --
 ALTER TABLE `episodes`
   ADD PRIMARY KEY (`episode_id`),
   ADD KEY `movie_id` (`movie_id`);
 
 --
--- Indexes for table `favorites`
+-- Chỉ mục cho bảng `favorites`
 --
 ALTER TABLE `favorites`
   ADD PRIMARY KEY (`favorite_id`),
@@ -521,14 +605,14 @@ ALTER TABLE `favorites`
   ADD KEY `movie_id` (`movie_id`);
 
 --
--- Indexes for table `genres`
+-- Chỉ mục cho bảng `genres`
 --
 ALTER TABLE `genres`
   ADD PRIMARY KEY (`genre_id`),
   ADD UNIQUE KEY `slug` (`slug`);
 
 --
--- Indexes for table `movies`
+-- Chỉ mục cho bảng `movies`
 --
 ALTER TABLE `movies`
   ADD PRIMARY KEY (`movie_id`),
@@ -536,35 +620,42 @@ ALTER TABLE `movies`
   ADD KEY `country_id` (`country_id`);
 
 --
--- Indexes for table `movie_actors`
+-- Chỉ mục cho bảng `movie_actors`
 --
 ALTER TABLE `movie_actors`
   ADD PRIMARY KEY (`movie_id`,`actor_id`),
   ADD KEY `actor_id` (`actor_id`);
 
 --
--- Indexes for table `movie_directors`
+-- Chỉ mục cho bảng `movie_directors`
 --
 ALTER TABLE `movie_directors`
   ADD PRIMARY KEY (`movie_id`,`director_id`),
   ADD KEY `director_id` (`director_id`);
 
 --
--- Indexes for table `movie_genres`
+-- Chỉ mục cho bảng `movie_genres`
 --
 ALTER TABLE `movie_genres`
   ADD PRIMARY KEY (`movie_id`,`genre_id`),
   ADD KEY `genre_id` (`genre_id`);
 
 --
--- Indexes for table `notifications`
+-- Chỉ mục cho bảng `notifications`
 --
 ALTER TABLE `notifications`
   ADD PRIMARY KEY (`notification_id`),
   ADD KEY `user_id` (`user_id`);
 
 --
--- Indexes for table `ratings`
+-- Chỉ mục cho bảng `orders`
+--
+ALTER TABLE `orders`
+  ADD PRIMARY KEY (`order_id`),
+  ADD KEY `user_id` (`user_id`);
+
+--
+-- Chỉ mục cho bảng `ratings`
 --
 ALTER TABLE `ratings`
   ADD PRIMARY KEY (`rating_id`),
@@ -572,7 +663,7 @@ ALTER TABLE `ratings`
   ADD KEY `movie_id` (`movie_id`);
 
 --
--- Indexes for table `subscriptions`
+-- Chỉ mục cho bảng `subscriptions`
 --
 ALTER TABLE `subscriptions`
   ADD PRIMARY KEY (`subscription_id`),
@@ -580,13 +671,13 @@ ALTER TABLE `subscriptions`
   ADD KEY `plan_id` (`plan_id`);
 
 --
--- Indexes for table `subscription_plans`
+-- Chỉ mục cho bảng `subscription_plans`
 --
 ALTER TABLE `subscription_plans`
   ADD PRIMARY KEY (`plan_id`);
 
 --
--- Indexes for table `users`
+-- Chỉ mục cho bảng `users`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`user_id`),
@@ -594,7 +685,7 @@ ALTER TABLE `users`
   ADD UNIQUE KEY `email` (`email`);
 
 --
--- Indexes for table `watch_history`
+-- Chỉ mục cho bảng `watch_history`
 --
 ALTER TABLE `watch_history`
   ADD PRIMARY KEY (`history_id`),
@@ -603,105 +694,123 @@ ALTER TABLE `watch_history`
   ADD KEY `episode_id` (`episode_id`);
 
 --
--- AUTO_INCREMENT for dumped tables
+-- AUTO_INCREMENT cho các bảng đã đổ
 --
 
 --
--- AUTO_INCREMENT for table `actors`
+-- AUTO_INCREMENT cho bảng `actors`
 --
 ALTER TABLE `actors`
   MODIFY `actor_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `advertisements`
+-- AUTO_INCREMENT cho bảng `advertisements`
 --
 ALTER TABLE `advertisements`
   MODIFY `ad_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `comments`
+-- AUTO_INCREMENT cho bảng `categories`
+--
+ALTER TABLE `categories`
+  MODIFY `category_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT cho bảng `comments`
 --
 ALTER TABLE `comments`
   MODIFY `comment_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
--- AUTO_INCREMENT for table `countries`
+-- AUTO_INCREMENT cho bảng `contents`
+--
+ALTER TABLE `contents`
+  MODIFY `content_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT cho bảng `countries`
 --
 ALTER TABLE `countries`
   MODIFY `country_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
--- AUTO_INCREMENT for table `directors`
+-- AUTO_INCREMENT cho bảng `directors`
 --
 ALTER TABLE `directors`
   MODIFY `director_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `episodes`
+-- AUTO_INCREMENT cho bảng `episodes`
 --
 ALTER TABLE `episodes`
   MODIFY `episode_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `favorites`
+-- AUTO_INCREMENT cho bảng `favorites`
 --
 ALTER TABLE `favorites`
   MODIFY `favorite_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `genres`
+-- AUTO_INCREMENT cho bảng `genres`
 --
 ALTER TABLE `genres`
   MODIFY `genre_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10771;
 
 --
--- AUTO_INCREMENT for table `movies`
+-- AUTO_INCREMENT cho bảng `movies`
 --
 ALTER TABLE `movies`
-  MODIFY `movie_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=221;
+  MODIFY `movie_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=224;
 
 --
--- AUTO_INCREMENT for table `notifications`
+-- AUTO_INCREMENT cho bảng `notifications`
 --
 ALTER TABLE `notifications`
   MODIFY `notification_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `ratings`
+-- AUTO_INCREMENT cho bảng `orders`
+--
+ALTER TABLE `orders`
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+
+--
+-- AUTO_INCREMENT cho bảng `ratings`
 --
 ALTER TABLE `ratings`
   MODIFY `rating_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `subscriptions`
+-- AUTO_INCREMENT cho bảng `subscriptions`
 --
 ALTER TABLE `subscriptions`
   MODIFY `subscription_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `subscription_plans`
+-- AUTO_INCREMENT cho bảng `subscription_plans`
 --
 ALTER TABLE `subscription_plans`
   MODIFY `plan_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `users`
+-- AUTO_INCREMENT cho bảng `users`
 --
 ALTER TABLE `users`
-  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT for table `watch_history`
+-- AUTO_INCREMENT cho bảng `watch_history`
 --
 ALTER TABLE `watch_history`
   MODIFY `history_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- Constraints for dumped tables
+-- Các ràng buộc cho các bảng đã đổ
 --
 
 --
--- Constraints for table `comments`
+-- Các ràng buộc cho bảng `comments`
 --
 ALTER TABLE `comments`
   ADD CONSTRAINT `comments_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE,
@@ -710,67 +819,73 @@ ALTER TABLE `comments`
   ADD CONSTRAINT `comments_ibfk_4` FOREIGN KEY (`parent_id`) REFERENCES `comments` (`comment_id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `episodes`
+-- Các ràng buộc cho bảng `episodes`
 --
 ALTER TABLE `episodes`
   ADD CONSTRAINT `episodes_ibfk_1` FOREIGN KEY (`movie_id`) REFERENCES `movies` (`movie_id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `favorites`
+-- Các ràng buộc cho bảng `favorites`
 --
 ALTER TABLE `favorites`
   ADD CONSTRAINT `favorites_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE,
   ADD CONSTRAINT `favorites_ibfk_2` FOREIGN KEY (`movie_id`) REFERENCES `movies` (`movie_id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `movies`
+-- Các ràng buộc cho bảng `movies`
 --
 ALTER TABLE `movies`
   ADD CONSTRAINT `movies_ibfk_1` FOREIGN KEY (`country_id`) REFERENCES `countries` (`country_id`) ON DELETE SET NULL;
 
 --
--- Constraints for table `movie_actors`
+-- Các ràng buộc cho bảng `movie_actors`
 --
 ALTER TABLE `movie_actors`
   ADD CONSTRAINT `movie_actors_ibfk_1` FOREIGN KEY (`movie_id`) REFERENCES `movies` (`movie_id`) ON DELETE CASCADE,
   ADD CONSTRAINT `movie_actors_ibfk_2` FOREIGN KEY (`actor_id`) REFERENCES `actors` (`actor_id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `movie_directors`
+-- Các ràng buộc cho bảng `movie_directors`
 --
 ALTER TABLE `movie_directors`
   ADD CONSTRAINT `movie_directors_ibfk_1` FOREIGN KEY (`movie_id`) REFERENCES `movies` (`movie_id`) ON DELETE CASCADE,
   ADD CONSTRAINT `movie_directors_ibfk_2` FOREIGN KEY (`director_id`) REFERENCES `directors` (`director_id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `movie_genres`
+-- Các ràng buộc cho bảng `movie_genres`
 --
 ALTER TABLE `movie_genres`
   ADD CONSTRAINT `movie_genres_ibfk_1` FOREIGN KEY (`movie_id`) REFERENCES `movies` (`movie_id`) ON DELETE CASCADE,
   ADD CONSTRAINT `movie_genres_ibfk_2` FOREIGN KEY (`genre_id`) REFERENCES `genres` (`genre_id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `notifications`
+-- Các ràng buộc cho bảng `notifications`
 --
 ALTER TABLE `notifications`
   ADD CONSTRAINT `notifications_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `ratings`
+-- Các ràng buộc cho bảng `orders`
+--
+ALTER TABLE `orders`
+  ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`);
+
+--
+-- Các ràng buộc cho bảng `ratings`
 --
 ALTER TABLE `ratings`
   ADD CONSTRAINT `ratings_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE,
   ADD CONSTRAINT `ratings_ibfk_2` FOREIGN KEY (`movie_id`) REFERENCES `movies` (`movie_id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `subscriptions`
+-- Các ràng buộc cho bảng `subscriptions`
 --
 ALTER TABLE `subscriptions`
   ADD CONSTRAINT `subscriptions_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE,
   ADD CONSTRAINT `subscriptions_ibfk_2` FOREIGN KEY (`plan_id`) REFERENCES `subscription_plans` (`plan_id`) ON DELETE CASCADE;
 
 --
--- Constraints for table `watch_history`
+-- Các ràng buộc cho bảng `watch_history`
 --
 ALTER TABLE `watch_history`
   ADD CONSTRAINT `watch_history_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE,

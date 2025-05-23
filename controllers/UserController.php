@@ -75,13 +75,23 @@ class UserController {
 
     
     public function logout() {
-        // Xóa session
-        unset($_SESSION['user_id']);
-        unset($_SESSION['username']);
-        unset($_SESSION['is_logged_in']);
-        
+        // Xóa tất cả các biến session
+        $_SESSION = array();
+
+        // Xóa cookie session nếu có
+        if (isset($_COOKIE[session_name()])) {
+            setcookie(session_name(), '', time() - 3600, '/');
+        }
+
+        // Hủy session
         session_destroy();
-        redirect('index.php');
+
+        // Đảm bảo không có output trước khi redirect
+        if (ob_get_length()) ob_clean();
+        
+        // Chuyển hướng về trang chủ với tham số để tránh cache
+        header("Location: index.php?nocache=" . time());
+        exit();
     }
 }
 ?>
