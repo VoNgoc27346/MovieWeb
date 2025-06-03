@@ -1,0 +1,60 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Thiết lập font chữ toàn cục */
+body {
+  font-family: 'Arial', sans-serif;
+  line-height: 1.6;
+  background-color: #f4f4f4;
+  color: #333;
+  margin: 0;
+  padding: 0;
+}
+
+.movie-details {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 20;
+}
+
+.movie-card:hover .movie-details {
+  opacity: 1;
+}
+
+.movie-card:hover .overlay-play {
+  opacity: 0;
+}
+
+.movie-card:hover .movie-details {
+  opacity: 1;
+}
+
+.movie-card:hover .overlay-play {
+  opacity: 0;
+}
+
+/* Thêm vào các CSS đã có sẵn trong trang của bạn */
+.card-hover {
+  transition: box-shadow 0.3s, transform 0.3s;
+}
+.card-hover:hover {
+  box-shadow: 0 12px 32px 0 rgba(85, 71, 187, 0.27), 0 1.5px 15px 0 rgba(34, 34, 50, 0.4);
+  transform: translateY(-6px) scale(1.02);
+}
+.img-hover {
+  transition: transform 0.5s cubic-bezier(.4,0,.2,1), filter 0.4s;
+}
+.card-hover:hover .img-hover {
+  transform: scale(1.07);
+  filter: brightness(0.7);
+}
+
+#movie-grid {
+  scrollbar-width: none; /* Firefox */
+}
+#movie-grid::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
