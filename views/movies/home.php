@@ -1,6 +1,51 @@
 <?php include('./views/layouts/header.php'); ?>
 
 <body class="bg-[#17171e] text-white min-h-screen">
+    <!-- Hiển thị thông báo thành công/lỗi -->
+    <?php if (isset($_SESSION['success'])): ?>
+        <div id="success-alert" class="fixed top-4 right-4 z-50 bg-green-500 text-white p-4 rounded-md shadow-lg flex items-center justify-between max-w-md animate__animated animate__fadeInRight">
+            <div class="flex items-center">
+                <i class="fas fa-check-circle mr-2 text-xl"></i>
+                <?= $_SESSION['success']; ?>
+            </div>
+            <button onclick="this.parentElement.remove()" class="text-white focus:outline-none ml-4">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <script>
+            setTimeout(() => {
+                const alert = document.getElementById('success-alert');
+                if (alert) alert.classList.add('animate__fadeOutRight');
+                setTimeout(() => {
+                    if (alert) alert.remove();
+                }, 500);
+            }, 5000);
+        </script>
+        <?php unset($_SESSION['success']); ?>
+    <?php endif; ?>
+    
+    <?php if (isset($_SESSION['error'])): ?>
+        <div id="error-alert" class="fixed top-4 right-4 z-50 bg-red-500 text-white p-4 rounded-md shadow-lg flex items-center justify-between max-w-md animate__animated animate__fadeInRight">
+            <div class="flex items-center">
+                <i class="fas fa-exclamation-circle mr-2 text-xl"></i>
+                <?= $_SESSION['error']; ?>
+            </div>
+            <button onclick="this.parentElement.remove()" class="text-white focus:outline-none ml-4">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <script>
+            setTimeout(() => {
+                const alert = document.getElementById('error-alert');
+                if (alert) alert.classList.add('animate__fadeOutRight');
+                setTimeout(() => {
+                    if (alert) alert.remove();
+                }, 500);
+            }, 5000);
+        </script>
+        <?php unset($_SESSION['error']); ?>
+    <?php endif; ?>
+
     <!-- Banner phim nổi bật -->
     <div class="movie-banner relative w-full h-[500px] overflow-hidden">
         <!-- Backdrop phim với hiệu ứng gradient overlay -->
@@ -139,6 +184,13 @@
                         <div class="absolute top-2 right-2 bg-yellow-500 text-black font-bold px-2 py-1 rounded-full text-xs flex items-center">
                             <span class="mr-1">★</span> <?= $movie['rating'] ?>
                         </div>
+
+                        <!-- VIP Badge cho phim là premium hoặc rating cao -->
+                        <?php if ((isset($movie['premium']) && $movie['premium'] == 1) || $movie['rating'] > 8.5): ?>
+                        <div class="absolute top-2 left-2 bg-gradient-to-r from-yellow-600 to-yellow-400 text-black font-bold px-2 py-1 rounded-full text-xs flex items-center premium-content-badge vip-badge">
+                            <i class="fas fa-crown mr-1"></i>
+                        </div>
+                        <?php endif; ?>
 
                         <!-- Hover Overlay - Fixed to prevent being cut off -->
                         <div class="absolute opacity-0 group-hover:opacity-100 transition-all duration-300 
@@ -411,6 +463,94 @@
         bannerContainer.addEventListener('mouseenter', stopAutoSlide);
         bannerContainer.addEventListener('mouseleave', startAutoSlide);
     </script>
+
+<!-- Script thêm để kích hoạt VIP Mode -->
+<script>
+    // Thêm kiểm tra VIP status sau khi trang load xong
+    document.addEventListener('DOMContentLoaded', function() {
+        // Kiểm tra nếu người dùng là VIP
+        if (document.body.classList.contains('vip-user')) {
+            console.log('VIP user detected, applying special effects');
+            
+            // Thêm hiệu ứng cho các badge VIP
+            setTimeout(function() {
+                var premiumBadges = document.querySelectorAll('.premium-content-badge');
+                premiumBadges.forEach(function(badge) {
+                    badge.classList.add('vip-badge');
+                    badge.style.animation = "vipPulse 2s infinite";
+                });
+                
+                // Thêm hiệu ứng cho các nút xem phim
+                var watchButtons = document.querySelectorAll('.bg-green-600, .bg-green-500');
+                watchButtons.forEach(function(button) {
+                    button.style.background = "linear-gradient(to right, #4caf50, #2e7d32)";
+                });
+                
+                // Thay đổi giao diện header
+                var header = document.querySelector('header');
+                if (header) {
+                    header.style.background = "linear-gradient(to right, #13141a, #1c1e2a)";
+                    header.style.borderBottom = "1px solid #ffc345";
+                }
+            }, 200);
+        }
+    });
+</script>
+
+<!-- Script để ngăn cache CSS -->
+<script>
+    // Thêm timestamp vào URL CSS để ngăn cache
+    document.addEventListener('DOMContentLoaded', function() {
+        // Buộc trình duyệt tải lại CSS bằng cách thêm timestamp
+        var styles = document.getElementsByTagName('style');
+        for (var i = 0; i < styles.length; i++) {
+            styles[i].innerHTML = styles[i].innerHTML + ' /* ' + new Date().getTime() + ' */';
+        }
+        
+        // Thêm CSS trực tiếp để thử nghiệm
+        var css = `
+            .is-vip-user header, .vip-user header {
+                background: linear-gradient(to right, #13141a, #1c1e2a) !important;
+                border-bottom: 2px solid #ffc345 !important;
+            }
+            
+            .is-vip-user body, .vip-user body {
+                background: linear-gradient(to right, #13141a, #1c1e2a) !important;
+            }
+            
+            .vip-badge {
+                animation: vipPulse 2s infinite !important;
+                border: 1px solid gold !important;
+                position: relative !important;
+            }
+            
+            .vip-badge::after {
+                content: "";
+                position: absolute !important;
+                top: -3px !important;
+                left: -3px !important;
+                right: -3px !important;
+                bottom: -3px !important;
+                border-radius: 8px !important;
+                background: linear-gradient(45deg, gold, transparent, gold, transparent, gold) !important;
+                background-size: 200% !important;
+                animation: goldShine 3s linear infinite !important;
+                z-index: -1 !important;
+            }
+        `;
+        
+        // Thêm style mới vào document
+        var style = document.createElement('style');
+        style.type = 'text/css';
+        style.appendChild(document.createTextNode(css));
+        document.head.appendChild(style);
+        
+        console.log('Force-refreshed CSS styles to prevent caching');
+    });
+</script>
+
+</body>
+</html>
 
 <?php include('./views/layouts/footer.php'); ?>
 

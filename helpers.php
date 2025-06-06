@@ -1,8 +1,142 @@
 <?php
-function isLoggedIn() {
-    return isset($_SESSION['is_logged_in']) && $_SESSION['is_logged_in'] === true;
+// Đường dẫn đúng đến file Database.php
+require_once dirname(__FILE__) . '/models/Database.php';
+
+/**
+ * Chuyển hướng đến một URL
+ */
+function redirect($url) {
+    header("Location: $url");
+    exit;
 }
 
+/**
+ * Kiểm tra xem người dùng đã đăng nhập hay chưa
+ */
+function isLoggedIn() {
+    return isset($_SESSION['user_id']) && !empty($_SESSION['user_id']);
+}
+
+/**
+ * Kiểm tra xem người dùng có quyền VIP hay không
+ */
+function isVIP() {
+    if (!isLoggedIn()) {
+        return false;
+    }
+    
+    // Nếu thông tin VIP đã có trong session, sử dụng nó
+    if (isset($_SESSION['is_vip']) && isset($_SESSION['vip_expiry'])) {
+        return $_SESSION['is_vip'] && strtotime($_SESSION['vip_expiry']) > time();
+    }
+    
+    // Nếu không, truy vấn từ database
+    $db = Database::getInstance();
+    $user = $db->querySingle("SELECT is_vip, vip_expiry FROM users WHERE user_id = ?", [$_SESSION['user_id']]);
+    
+    if (is_array($user)) {
+        // Lưu vào session để tránh truy vấn liên tục
+        $_SESSION['is_vip'] = $user['is_vip'];
+        $_SESSION['vip_expiry'] = $user['vip_expiry'];
+        
+        return $user['is_vip'] && strtotime($user['vip_expiry']) > time();
+    }
+    
+    return false;
+}
+
+/**
+ * Hàm escape HTML để ngăn XSS
+ */
+function h($string) {
+    return htmlspecialchars($string, ENT_QUOTES, 'UTF-8');
+}
+
+/**
+ * Tạo URL an toàn
+ */
+function slug($string) {
+    $string = preg_replace('/[^\p{L}\p{N}]/u', '-', $string);
+    $string = preg_replace('/-+/', '-', $string);
+    $string = trim($string, '-');
+    return strtolower($string);
+}
+
+/**
+ * Debug helper
+ */
+function debug($data) {
+    echo '<pre>';
+    var_dump($data);
+    echo '</pre>';
+}
+
+/**
+ * Cắt chuỗi với độ dài xác định và thêm dấu ba chấm
+ */
+function truncate($string, $length = 100) {
+    if (strlen($string) > $length) {
+        return substr($string, 0, $length) . '...';
+    }
+    return $string;
+}
+
+/**
+ * Format date
+ */
+function formatDate($date) {
+    return date('d/m/Y', strtotime($date));
+}
+
+/**
+ * Tạo flash message
+ */
+function setFlashMessage($type, $message) {
+    $_SESSION[$type] = $message;
+}
+
+/**
+ * Làm mới trang
+ */
+function refreshPage() {
+    header("Refresh:0");
+    exit;
+}
+
+/**
+ * Đặt cookie với thời gian sống
+ */
+function setCustomCookie($name, $value, $days = 30) {
+    setcookie($name, $value, time() + (86400 * $days), "/");
+}
+
+/**
+ * Lấy giá trị cookie
+ */
+function getCookie($name) {
+    return isset($_COOKIE[$name]) ? $_COOKIE[$name] : null;
+}
+
+/**
+ * Xóa cookie
+ */
+function deleteCookie($name) {
+    setcookie($name, "", time() - 3600, "/");
+}
+
+/**
+ * Khởi tạo hoặc khôi phục session
+ */
+function initSession() {
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+}
+
+// Đảm bảo session được khởi tạo
+initSession();
+
+// Lấy thông tin người dùng hiện tại
 function getCurrentUser() {
     if (isLoggedIn()) {
         return [
@@ -13,6 +147,7 @@ function getCurrentUser() {
     return null;
 }
 
+// Yêu cầu đăng nhập
 function requireLogin() {
     if (!isLoggedIn()) {
         $_SESSION['error'] = 'Vui lòng đăng nhập để tiếp tục';
@@ -21,15 +156,12 @@ function requireLogin() {
     }
 }
 
-function redirect($url) {
-    header("Location: $url");
-    exit;
-}
-
+// Thiết lập thông báo flash
 function setFlash($key, $message) {
     $_SESSION['flash'][$key] = $message;
 }
 
+// Lấy và xóa thông báo flash
 function getFlash($key) {
     if (isset($_SESSION['flash'][$key])) {
         $message = $_SESSION['flash'][$key];

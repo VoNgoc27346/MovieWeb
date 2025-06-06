@@ -1,53 +1,82 @@
 <?php
 session_start();
+
+// Debug các file include
+// var_dump(file_exists('helpers.php')); // Nên trả về true
+// var_dump(file_exists('controllers/MovieController.php')); // Nên trả về true
+// var_dump(file_exists('controllers/UserController.php')); // Nên trả về true
+// var_dump(file_exists('controllers/CommentController.php')); // Nên trả về true
+// var_dump(file_exists('controllers/RatingController.php')); // Nên trả về true
+// die(); // Tạm thời comment dòng này sau khi debug xong
+
+require_once 'helpers.php';
 require_once 'controllers/MovieController.php';
-require_once 'controllers/CommentController.php'; 
-require_once 'controllers/UserController.php';    
-require_once 'models/MovieModel.php';
+require_once 'controllers/UserController.php';
+require_once 'controllers/CommentController.php';
+require_once 'controllers/RatingController.php';
 
+$controllerName = isset($_GET['controller']) ? $_GET['controller'] : 'movie';
+$action = isset($_GET['action']) ? $_GET['action'] : 'index';
+$view = isset($_GET['view']) ? $_GET['view'] : null;
 
-// Bắt biến từ URL
-$controller = $_GET['controller'] ?? 'movie';
-$action = $_GET['action'] ?? 'index';
-$slug = $_GET['slug'] ?? '';
+// Kiểm tra nếu truy cập trang VIP
+if ($view === 'vip.php') {
+    $userController = new UserController();
+    $userController->upgradeVip();
+    exit();
+}
 
-switch ($controller) {
+// Kiểm tra nếu truy cập trang Payment
+if ($view === 'payment.php') {
+    // Đảm bảo plan được truyền
+    if (!isset($_GET['plan'])) {
+        redirect('index.php?view=vip.php');
+    }
+    // Include file payment.php trực tiếp
+    require_once 'views/payment.php';
+    exit();
+}
+
+$movieController = new MovieController();
+$userController = new UserController();
+$commentController = new CommentController();
+$ratingController = new RatingController();
+
+switch ($controllerName) {
     case 'movie':
-        $movieController = new MovieController();
-        if ($action == 'watch' && !empty($slug)) {
+        if ($action === 'watch') {
+            $slug = $_GET['slug'] ?? '';
             $movieController->watch($slug);
+        } elseif ($action === 'fetch') {
+            $movieController->fetchMoviesFromTMDB();
         } else {
             $movieController->index();
         }
         break;
-
-    case 'comment':
-        $commentController = new CommentController();
-        if ($action == 'comment_post') {
-            $commentController->postComment();
-        }
-        break;
-
     case 'user':
-        $userController = new UserController();
-        if ($action == 'login') {
+        if ($action === 'login') {
             $userController->login();
-        } elseif ($action == 'register') {
+        } elseif ($action === 'register') {
             $userController->register();
-        } elseif ($action == 'logout') {
+        } elseif ($action === 'logout') {
             $userController->logout();
+        } elseif ($action === 'upgradeVip') {
+            $userController->upgradeVip();
         }
         break;
-    
+    case 'comment':
+        if ($action === 'submit') {
+            $commentController->postComment();
+        } elseif ($action === 'delete') {
+            $commentController->deleteComment();
+        }
+        break;
     case 'rating':
-        $ratingController = new RatingController();
-        if ($action == 'submit') {
+        if ($action === 'submit') {
             $ratingController->submit();
         }
         break;
-
     default:
-        echo "Controller không tồn tại!";
-        break;
+        $movieController->index();
 }
 ?>

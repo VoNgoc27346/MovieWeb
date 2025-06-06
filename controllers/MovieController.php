@@ -1,25 +1,18 @@
 <?php
-
 require_once 'models/MovieModel.php';
 require_once 'models/Comment.php';
 
-
-
 class MovieController {
-
     private $movieModel;
     private $commentModel;
 
-    private function render($viewPath, $data = [])
-    {
+    private function render($viewPath, $data = []) {
         extract($data); // chuyển mảng thành biến
         require_once 'views/' . $viewPath . '.php';
     }
-    
 
     public function index() {
         $apiKey = '9be884418bf4e79829b5014c71b06b52';
-        
         $apiUrl = "https://api.themoviedb.org/3/movie/popular?api_key=$apiKey";
 
         $movieModel = new MovieModel();
@@ -28,8 +21,6 @@ class MovieController {
         // Lấy dữ liệu phim mới và phim sắp chiếu
         $newMovies = $movieModel->getNewMovies();
         $upcomingMovies = $movieModel->getUpcomingMovies();
-
-        
 
         $bannerData = $this->getBannerFromApi($apiUrl);
 
@@ -103,8 +94,6 @@ class MovieController {
         }
     }
 
-    
-
     private function getTrailerUrl($movieId, $apiKey) {
         $url = "https://api.themoviedb.org/3/movie/$movieId/videos?api_key=$apiKey&language=vi-VN";
         $response = file_get_contents($url);
@@ -149,14 +138,11 @@ class MovieController {
         }
     }
 
-    
-
     public function getComments($movie_id, $episode_id = null) {
         return $this->commentModel->getComments($movie_id, $episode_id);
     }
 
-    public function popularMovies()
-    {
+    public function popularMovies() {
         $movieModel = new MovieModel();
         $movies = $movieModel->getPopularMovies();
 
@@ -171,7 +157,6 @@ class MovieController {
         // Lấy danh sách bình luận
         $comments = $this->getComments($movie_id, $episode_id);
 
-        
         // Render view với dữ liệu bình luận
         $data = [
             'movie' => $movie,
@@ -181,8 +166,6 @@ class MovieController {
         ];
         
         $this->render('movie/detail', $data);
-
     }
 }
-    
 ?>
