@@ -117,8 +117,12 @@ require_once 'helpers.php';
                 <button class="p-2 rounded-full hover:bg-gray-700">
                   <i class="fas fa-share-alt"></i>
                 </button>
-                <button class="p-2 rounded-full hover:bg-gray-700">
-                  <i class="fas fa-bookmark"></i>
+                <button id="favorite-btn" 
+                    class="p-2 rounded-full hover:bg-gray-700"
+                    onclick="toggleFavorite(this, <?= $movie['movie_id'] ?>)"
+                    data-movie-id="<?= $movie['movie_id'] ?>"
+                >
+                  <i class="fas fa-heart <?= (isset($movie['is_favorite']) && $movie['is_favorite']) ? 'text-red-500' : 'text-gray-400' ?>"></i>
                 </button>
               </div>
             </div>
@@ -598,7 +602,7 @@ require_once 'helpers.php';
       ratingContainer.querySelectorAll('i').forEach((star, index) => {
         star.addEventListener('click', () => {
           const score = star.getAttribute('data-value');
-          const movieId = <?= json_encode($movie['id']) ?>;
+          const movieId = <?= json_encode($movie['movie_id']) ?>;
 
           if (!score || !movieId) {
             console.warn("Thiếu dữ liệu để đánh giá.");
@@ -636,6 +640,120 @@ require_once 'helpers.php';
           });
         });
       });
+    }
+  </script>
+
+  <script>
+    // Hàm xử lý yêu thích phim
+    function toggleFavorite(button, movieId) {
+        <?php if (!isLoggedIn()): ?>
+        // Nếu chưa đăng nhập, chuyển hướng đến trang đăng nhập
+        window.location.href = 'index.php?controller=user&action=login';
+        return;
+        <?php endif; ?>
+        
+        // Tạo form data
+        const formData = new FormData();
+        formData.append('movie_id', movieId);
+        
+        // Gửi request AJAX
+        fetch('index.php?controller=favorite&action=toggle', {
+            method: 'POST',
+            body: formData,
+            credentials: 'same-origin'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Cập nhật UI
+                const heartIcon = button.querySelector('i.fas.fa-heart');
+                
+                if (data.data.action === 'added') {
+                    heartIcon.classList.remove('text-gray-400');
+                    heartIcon.classList.add('text-red-500');
+                    
+                    // Hiển thị thông báo
+                    showNotification('Đã thêm vào danh sách yêu thích', 'success');
+                } else {
+                    heartIcon.classList.remove('text-red-500');
+                    heartIcon.classList.add('text-gray-400');
+                    
+                    // Hiển thị thông báo
+                    showNotification('Đã xóa khỏi danh sách yêu thích', 'info');
+                }
+            } else {
+                // Hiển thị thông báo lỗi
+                showNotification(data.message, 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showNotification('Đã xảy ra lỗi khi xử lý yêu cầu', 'error');
+        });
+    }
+
+    // Hàm hiển thị thông báo
+    function showNotification(message, type = 'info') {
+        // Tìm hoặc tạo container cho thông báo
+        let notificationContainer = document.getElementById('notification-container');
+        if (!notificationContainer) {
+            notificationContainer = document.createElement('div');
+            notificationContainer.id = 'notification-container';
+            notificationContainer.className = 'fixed top-4 right-4 z-50 flex flex-col gap-2';
+            document.body.appendChild(notificationContainer);
+        }
+        
+        // Tạo thông báo
+        const notification = document.createElement('div');
+        notification.className = 'animate__animated animate__fadeInRight p-4 rounded-md shadow-lg flex items-center justify-between max-w-md';
+        
+        // Thiết lập màu sắc dựa trên loại thông báo
+        if (type === 'success') {
+            notification.classList.add('bg-green-500', 'text-white');
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas fa-check-circle mr-2 text-xl"></i>
+                    ${message}
+                </div>
+                <button onclick="this.parentElement.remove()" class="text-white focus:outline-none ml-4">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+        } else if (type === 'error') {
+            notification.classList.add('bg-red-500', 'text-white');
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas fa-exclamation-circle mr-2 text-xl"></i>
+                    ${message}
+                </div>
+                <button onclick="this.parentElement.remove()" class="text-white focus:outline-none ml-4">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+        } else {
+            notification.classList.add('bg-blue-500', 'text-white');
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas fa-info-circle mr-2 text-xl"></i>
+                    ${message}
+                </div>
+                <button onclick="this.parentElement.remove()" class="text-white focus:outline-none ml-4">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+        }
+        
+        // Thêm thông báo vào container
+        notificationContainer.appendChild(notification);
+        
+        // Tự động xóa thông báo sau 3 giây
+        setTimeout(() => {
+            notification.classList.remove('animate__fadeInRight');
+            notification.classList.add('animate__fadeOutRight');
+            setTimeout(() => {
+                notification.remove();
+            }, 500);
+        }, 3000);
     }
   </script>
 

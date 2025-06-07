@@ -1,6 +1,6 @@
 <?php
 // Đường dẫn đúng đến file Database.php
-require_once dirname(__FILE__) . '/models/Database.php';
+require_once __DIR__ . '/models/Database.php';
 
 /**
  * Chuyển hướng đến một URL
@@ -30,18 +30,42 @@ function isVIP() {
         return $_SESSION['is_vip'] && strtotime($_SESSION['vip_expiry']) > time();
     }
     
-    // Nếu không, truy vấn từ database
+    // Nếu không, truy vấn từ database và cập nhật session
+    return refreshVIPStatus();
+}
+
+/**
+ * Làm mới trạng thái VIP từ database
+ * Trả về true nếu người dùng có VIP, false nếu không
+ */
+function refreshVIPStatus() {
+    if (!isLoggedIn()) {
+        return false;
+    }
+    
     $db = Database::getInstance();
     $user = $db->querySingle("SELECT is_vip, vip_expiry FROM users WHERE user_id = ?", [$_SESSION['user_id']]);
     
     if (is_array($user)) {
+        // Kiểm tra nếu VIP đã hết hạn
+        $isVipActive = $user['is_vip'] && strtotime($user['vip_expiry']) > time();
+        
+        // Nếu hết hạn, cập nhật database
+        if ($user['is_vip'] && !$isVipActive) {
+            $db->execute("UPDATE users SET is_vip = 0 WHERE user_id = ?", [$_SESSION['user_id']]);
+            $user['is_vip'] = 0;
+        }
+        
         // Lưu vào session để tránh truy vấn liên tục
-        $_SESSION['is_vip'] = $user['is_vip'];
+        $_SESSION['is_vip'] = $isVipActive ? 1 : 0;
         $_SESSION['vip_expiry'] = $user['vip_expiry'];
         
-        return $user['is_vip'] && strtotime($user['vip_expiry']) > time();
+        return $isVipActive;
     }
     
+    // Mặc định không phải VIP nếu không tìm thấy thông tin
+    $_SESSION['is_vip'] = 0;
+    $_SESSION['vip_expiry'] = null;
     return false;
 }
 

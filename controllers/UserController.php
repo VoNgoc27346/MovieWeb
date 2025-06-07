@@ -82,7 +82,7 @@ class UserController {
     }
     
     public function logout() {
-        // Lưu thông báo trước khi xóa session
+        // Lưu thông báo vào biến tạm thời
         $message = 'Đã đăng xuất thành công!';
         
         // Xóa tất cả các biến session
@@ -100,12 +100,14 @@ class UserController {
             );
         }
         
-        // Bắt đầu session mới để hiển thị thông báo
-        session_start();
-        $_SESSION['success'] = $message;
+        // Xóa cookie đăng nhập nếu có
+        setcookie('user_id', '', time() - 3600, '/');
+        setcookie('username', '', time() - 3600, '/');
         
-        // Chuyển hướng về trang chủ
-        redirect('index.php');
+        // Chuyển hướng về trang chủ với thông báo thành công
+        // Sử dụng header trực tiếp thay vì hàm redirect
+        header("Location: index.php?logout=success&message=" . urlencode($message));
+        exit();
     }
 
     public function upgradeVip() {
@@ -154,7 +156,10 @@ class UserController {
                 $_SESSION['vip_expiry'] = $expiryDate;
                 
                 $_SESSION['success'] = 'Chúc mừng! Bạn đã nâng cấp tài khoản VIP thành công. Hãy tận hưởng các quyền lợi đặc biệt!';
-                redirect('index.php');
+                
+                // Chuyển hướng về trang chủ với tham số để buộc tải lại trang
+                header("Location: index.php?vip_upgraded=true&t=" . time());
+                exit();
             } else {
                 $_SESSION['error'] = 'Đã có lỗi khi nâng cấp VIP. Vui lòng thử lại.';
                 redirect('index.php?view=vip.php');
