@@ -8,16 +8,17 @@ class User {
         $this->db = Database::getInstance();
     }
     
-    public function login($username, $password) {
-        $sql = "SELECT user_id, username, email, password, is_vip, vip_expiry FROM users WHERE username = ?";
-        $user = $this->db->querySingle($sql, [$username]);
-        
-        if ($user && password_verify($password, $user['password'])) {
-            return $user;
-        }
-        
-        return false;
+   public function login($username, $password) {
+    $sql = "SELECT user_id, username, email, password, role, is_vip, vip_expiry FROM users WHERE username = ?";
+    $user = $this->db->querySingle($sql, [$username]);
+    
+    if ($user && password_verify($password, $user['password'])) {
+        return $user;
     }
+    
+    return false;
+}
+
     
     public function register($username, $email, $password, $role = 'member') {
         // Kiểm tra xem username hoặc email đã tồn tại chưa

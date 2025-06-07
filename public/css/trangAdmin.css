@@ -1,0 +1,314 @@
+body {
+    margin: 0;
+    background: rgba(22, 22, 22, 1.00);
+    font-family: sans-serif;
+    color: #d3d3d3;
+}
+
+/* Giao diện Admin */
+.admin-content {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background: rgba(22, 22, 22, 1.00);
+    min-height: 100vh;
+}
+
+.admin-header {
+    text-align: center;
+    padding: 20px 0;
+    border-bottom: 1px solid #444;
+}
+
+.admin-header h1 {
+    margin: 0;
+    font-size: 2em;
+    color: #ffd700;
+}
+
+.admin-nav {
+    margin-top: 10px;
+}
+
+.admin-nav a {
+    color: #ffd700;
+    margin: 0 15px;
+    text-decoration: none;
+    font-size: 1.1em;
+}
+
+.admin-nav a:hover {
+    text-decoration: underline;
+}
+
+.admin-section {
+    margin-top: 30px;
+}
+
+.admin-form {
+    background: #333;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+}
+
+.admin-form h2 {
+    margin-top: 0;
+    font-size: 1.5em;
+}
+
+.admin-form form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.admin-form input,
+.admin-form textarea {
+    padding: 10px;
+    background: #444;
+    border: none;
+    border-radius: 5px;
+    color: #d3d3d3;
+    font-size: 1em;
+}
+
+.admin-form textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.admin-form button {
+    padding: 10px;
+    background: #ffd700;
+    color: #000;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.admin-form button:hover {
+    background: #e6c200;
+}
+
+.admin-table {
+    background: #333;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.admin-table h2 {
+    margin-top: 0;
+    font-size: 1.5em;
+}
+
+.admin-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.admin-table .edit-btn,
+.admin-table .delete-btn {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    margin-right: 5px;
+    text-decoration: none;
+    display: inline-block;
+}
+
+.admin-table .edit-btn {
+    background: #ffd700;
+    color: #000;
+}
+
+.admin-table .edit-btn:hover {
+    background: #e6c200;
+}
+
+.admin-table .delete-btn {
+    background: #ff4444;
+    color: #fff;
+}
+
+.admin-table .delete-btn:hover {
+    background: #cc0000;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #444;
+}
+
+.admin-table th {
+    background: #444;
+    color: #ffd700;
+}
+
+.admin-table td {
+    color: #d3d3d3;
+}
+
+.admin-table .thumbnail {
+    width: 50px;
+    height: auto;
+    border-radius: 5px;
+}
+
+.admin-table .edit-btn,
+.admin-table .delete-btn .cancel-btn {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9em;
+    margin-right: 5px;
+}
+
+.admin-table .edit-btn {
+    background: #ffd700;
+    color: #000;
+}
+
+.admin-table .edit-btn:hover {
+    background: #e6c200;
+}
+
+.admin-table .delete-btn {
+    background: #ff4444;
+    color: #fff;
+}
+
+.admin-table .delete-btn:hover {
+    background: #cc0000;
+}
+
+.admin-footer {
+    text-align: center;
+    padding: 20px 0;
+    border-top: 1px solid #444;
+    margin-top: 30px;
+}
+
+.admin-footer p {
+    margin: 0;
+    font-size: 0.9em;
+    color: #d3d3d3;
+}
+.banner-304 {
+	position: relative;
+    display: flex;
+    justify-content: space-between;
+    height: 350px;
+    background-color: #F7D8AA;
+    margin-top: 40px;
+   
+	    z-index: 10;
+	border-radius: 20px;
+}
+
+.banner-left {
+    position: relative;
+    width: 20%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+	
+}
+
+.flag-gif {
+	position: absolute;
+	top: -55px;
+	left: 67px;
+    width: 250px;
+    height: auto;
+    z-index: 2;
+	transform: rotate(-23deg);
+}
+
+.person-img {
+    position: absolute;
+    bottom: 0;
+    left: 20px;
+	width: 350px;
+    z-index: 1;
+}
+
+.banner-center {
+    position: relative;
+    width: 5000%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+	object-fit: cover;
+	overflow: hidden;
+}
+
+.bg-img {
+    position: absolute;
+    top: 0;
+    left: 0px;
+    width: 480px;
+    height: auto;
+    z-index: 0;
+    opacity: 0.4;
+	border-radius: 20px
+}
+
+.text-img {
+    max-width: 350px;
+    z-index: 2;
+    margin-top: 50px;
+}
+
+.btn-info {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: white;
+    color: black;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    z-index: 2;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+    transition: background-color 0.3s ease;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+.btn-info:hover {
+    background-color: #ffd;
+}
+
+.banner-right {
+    width: 10%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.next-btn {
+    background-color: #c41c1c;
+    color: white;
+    font-size: 30px;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.next-btn:hover {
+    background-color: #a01010;
+}
