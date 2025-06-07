@@ -1,17 +1,20 @@
 <?php
 session_start();
 
+// if (!isset($_SESSION['user']) || !isset($_SESSION['user']['role'])) {
+//     header('Location: ../../index.php');
+//     exit;
+// }
+
+// if ($_SESSION['user']['role'] !== 'admin') {
+//     header('Location: ../../index.php');
+//     exit;
+// }
 $host = 'localhost';
 $dbname = 'movie_online';
 $username = 'root';
 $password = '';
-// Kiểm tra quyền truy cập cho role admin
-if (!isset($_SESSION['user']) || $_SESSION['user']['role'] !== 'admin') {
-    header('Location: /MovieWeb/index.php?controller=user&action=login');
-    exit;
-}else{
-    header('Location: /MovieWeb/views/movies/Admin.php');
-}
+
 
 try {
     $conn = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
@@ -19,7 +22,6 @@ try {
 } catch (PDOException $e) {
     die("Kết nối thất bại: " . $e->getMessage());
 }
-
 // Hàm tạo slug
 function createSlug($string) {
     $slug = preg_replace('/[^a-zA-Z0-9\s]/', '', $string);
@@ -555,7 +557,7 @@ if ($section === 'films') {
                 <a class="nav-link <?php echo $section === 'users' ? 'active' : ''; ?>" href="?section=users">Quản lý người dùng</a>
                 <a class="nav-link <?php echo $section === 'subscriptions' ? 'active' : ''; ?>" href="?section=subscriptions">Quản lý gói đăng ký</a>
                 <a class="nav-link <?php echo $section === 'genres' ? 'active' : ''; ?>" href="?section=genres">Quản lý thể loại</a>
-                <a class="nav-link" href="logout.php">Đăng xuất</a>
+                <a class="nav-link" href="../../index.php?controller=user&action=logout" onclick="return forceReload();">Đăng xuất</a>
             </nav>
         </header>
         <div class="banner-304">

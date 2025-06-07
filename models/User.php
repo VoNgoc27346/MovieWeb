@@ -8,16 +8,37 @@ class User {
         $this->db = Database::getInstance();
     }
     
-   public function login($username, $password) {
-    $sql = "SELECT user_id, username, email, password, role, is_vip, vip_expiry FROM users WHERE username = ?";
-    $user = $this->db->querySingle($sql, [$username]);
-    
-    if ($user && password_verify($password, $user['password'])) {
-        return $user;
+    public function login($username, $password) {
+        if (empty($username) || empty($password)) {
+            return false;
+        }
+
+        $sql = "SELECT user_id, username, email, password, role, is_vip, vip_expiry FROM users WHERE username = ?";
+        $user = $this->db->querySingle($sql, [$username]);
+
+        if ($user && password_verify($password, $user['password'])) {
+            // Lưu thông tin vào session
+            $_SESSION['user_id'] = $user['user_id'];
+            $_SESSION['username'] = $user['username'];
+            $_SESSION['email'] = $user['email'];
+            $_SESSION['role'] = $user['role'];
+            $_SESSION['is_vip'] = (bool)$user['is_vip'];
+            $_SESSION['vip_expiry'] = $user['vip_expiry'];
+
+            // Xử lý redirect dựa trên vai trò
+            $basePath = dirname($_SERVER['PHP_SELF']); // Lấy đường dẫn tương đối
+            if ($user['role'] === 'admin') {
+                header('Location: ' . $basePath . '/../../MovieWeb/views/movies/Admin.php');
+                exit;
+            } elseif ($user['role'] === 'member' || $user['role'] === 'premium') {
+                header('Location: ' . $basePath . '/../../MovieWeb/index.php');
+                exit;
+            }
+            return $user;
+        }
+        return false;
     }
-    
-    return false;
-}
+
 
     
     public function register($username, $email, $password, $role = 'member') {
