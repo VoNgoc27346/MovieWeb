@@ -74,24 +74,31 @@ require_once 'helpers.php';
   <main class="container mx-auto py-6 px-4">
     <div class="flex flex-col lg:flex-row gap-6">
       <!-- Left Section - Video Player -->
-      <div class="w-full lg:w-2/3">
-        <!-- Video Player -->
-        <div class="bg-black relative aspect-video rounded-lg flex items-center justify-center overflow-hidden mb-6">
-          <img src="https://via.placeholder.com/1280x720" alt="Movie Thumbnail" class="w-full h-full object-cover opacity-50" />
-            <div class="absolute">
-              <button class="bg-green-600 hover:bg-green-700 text-white p-6 rounded-full flex items-center justify-center transform transition hover:scale-110" onclick="openVideo('<?= $movie['video_url']; ?>')">
-              <i class="fas fa-play text-3xl"></i>
-              </button>
-          </div>
-        </div>
+      <div class="w-full lg:w-5/6">
 
-        <!-- Modal Video Display -->
-        <div id="videoModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-          <div class="relative w-full h-full max-w-3xl">
-              <button onclick="closeModal()" class="absolute top-2 right-2 text-white text-2xl">X</button>
-              <iframe id="videoIframe" width="100%" height="100%" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <!-- Khung video -->
+      <div id="videoContainer" class="bg-black relative aspect-video rounded-lg flex items-center justify-center overflow-hidden mb-6 w-full h-[600px]">
+          <!-- Ảnh đại diện + nút play -->
+          <div id="videoThumbnail" class="w-full h-full relative">
+              <img src="https://via.placeholder.com/1280x720" alt="Movie Thumbnail"
+                  class="w-full h-full object-cover opacity-50" />
+              <div class="absolute inset-0 flex items-center justify-center">
+                  <button onclick="playVideo('<?= htmlspecialchars($movie['trailer_url']); ?>')"
+                          class="bg-green-600 hover:bg-green-700 text-white p-6 rounded-full flex items-center justify-center transform transition hover:scale-110 shadow-lg">
+                      <i class="fas fa-play text-3xl"></i>
+                  </button>
+              </div>
           </div>
-        </div>
+
+          <!-- Iframe video sẽ hiển thị ở đây -->
+          <div id="videoFrame" class="absolute inset-0 w-full h-full hidden">
+              <iframe id="youtubeIframe" class="w-full h-full" src="" frameborder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowfullscreen></iframe>
+          </div>
+      </div>
+
+
           <!-- Title and Actions -->
           <div class="mb-6">
             <div class="flex flex-col md:flex-row md:items-center justify-between mb-2">
@@ -594,6 +601,40 @@ require_once 'helpers.php';
 
 
   </script>
+  <script>
+  function playVideo(url) {
+    const embedUrl = convertYouTubeToEmbed(url);
+    document.getElementById("youtubeIframe").src = embedUrl;
+    document.getElementById("videoThumbnail").classList.add("hidden");
+    document.getElementById("videoFrame").classList.remove("hidden");
+  }
+
+  function convertYouTubeToEmbed(url) {
+    try {
+      const urlObj = new URL(url);
+      if (urlObj.hostname.includes('youtube.com') && urlObj.searchParams.get('v')) {
+        const videoId = urlObj.searchParams.get('v');
+        const t = urlObj.searchParams.get('t');
+        const start = t ? `?start=${parseYouTubeTime(t)}` : '';
+        return `https://www.youtube.com/embed/${videoId}${start}&autoplay=1`;
+      }
+      return url;
+    } catch (e) {
+      return url;
+    }
+  }
+
+  function parseYouTubeTime(t) {
+    if (!t) return 0;
+    if (!isNaN(t)) return parseInt(t);
+    const match = t.match(/(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s)?/);
+    const h = parseInt(match[1]) || 0;
+    const m = parseInt(match[2]) || 0;
+    const s = parseInt(match[3]) || 0;
+    return h * 3600 + m * 60 + s;
+  }
+</script>
+
   <script>
     console.log("JS loaded!");
 
