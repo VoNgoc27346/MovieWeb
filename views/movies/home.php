@@ -232,11 +232,15 @@
                                     </svg>
                                     Xem ngay
                                 </a>
-                                    <button class="bg-gray-800 hover:bg-gray-700 border border-gray-600 p-2 rounded-full text-lg flex items-center justify-center w-10 h-10 transition-colors duration-200 flex-grow">
-                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
+                                    <button 
+                                        class="favorite-btn bg-gray-800 hover:bg-gray-700 border border-gray-600 p-2 rounded-full text-lg flex items-center justify-center w-10 h-10 transition-colors duration-200 flex-grow"
+                                        data-movie-id="<?= $movie['movie_id'] ?>"
+                                        onclick="toggleFavorite(this, <?= $movie['movie_id'] ?>)"
+                                    >
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 <?= (isLoggedIn() && isset($movie['is_favorite']) && $movie['is_favorite']) ? 'text-red-500' : 'text-white' ?>" viewBox="0 0 20 20" fill="currentColor">
                                             <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd" />
                                         </svg>
-                                        Thích
+                                        <span class="ml-1">Thích</span>
                                     </button>
                                     <button class="bg-gray-800 hover:bg-gray-700 border border-gray-600 p-2 rounded-full text-sm flex items-center justify-center w-10 h-10 transition-colors duration-200">
                                         <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" viewBox="0 0 20 20" fill="currentColor">
@@ -547,6 +551,111 @@
         
         console.log('Force-refreshed CSS styles to prevent caching');
     });
+</script>
+
+<!-- Thêm script để xử lý thích phim ở cuối file trước đóng thẻ body -->
+<script>
+function toggleFavorite(button, movieId) {
+    <?php if (!isLoggedIn()): ?>
+    // Nếu chưa đăng nhập, chuyển hướng đến trang đăng nhập
+    window.location.href = 'index.php?controller=user&action=login';
+    return;
+    <?php endif; ?>
+    
+    // Tạo form data
+    const formData = new FormData();
+    formData.append('movie_id', movieId);
+    
+    // Gửi request AJAX
+    fetch('index.php?controller=favorite&action=toggle', {
+        method: 'POST',
+        body: formData,
+        credentials: 'same-origin'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Cập nhật UI
+            const heartIcon = button.querySelector('svg');
+            
+            if (data.data.action === 'added') {
+                heartIcon.classList.remove('text-white');
+                heartIcon.classList.add('text-red-500');
+                
+                // Hiển thị thông báo
+                showToast('Đã thêm vào danh sách yêu thích', 'success');
+            } else {
+                heartIcon.classList.remove('text-red-500');
+                heartIcon.classList.add('text-white');
+                
+                // Hiển thị thông báo
+                showToast('Đã xóa khỏi danh sách yêu thích', 'info');
+            }
+        } else {
+            // Hiển thị thông báo lỗi
+            showToast(data.message, 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showToast('Đã xảy ra lỗi khi xử lý yêu cầu', 'error');
+    });
+}
+
+// Hàm hiển thị thông báo
+function showToast(message, type = 'info') {
+    // Tạo phần tử toast
+    const toast = document.createElement('div');
+    toast.className = 'fixed top-4 right-4 z-50 animate__animated animate__fadeInRight p-4 rounded-md shadow-lg flex items-center justify-between max-w-md';
+    
+    // Thiết lập màu sắc dựa trên loại thông báo
+    if (type === 'success') {
+        toast.classList.add('bg-green-500', 'text-white');
+        toast.innerHTML = `
+            <div class="flex items-center">
+                <i class="fas fa-check-circle mr-2 text-xl"></i>
+                ${message}
+            </div>
+            <button onclick="this.parentElement.remove()" class="text-white focus:outline-none ml-4">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+    } else if (type === 'error') {
+        toast.classList.add('bg-red-500', 'text-white');
+        toast.innerHTML = `
+            <div class="flex items-center">
+                <i class="fas fa-exclamation-circle mr-2 text-xl"></i>
+                ${message}
+            </div>
+            <button onclick="this.parentElement.remove()" class="text-white focus:outline-none ml-4">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+    } else {
+        toast.classList.add('bg-blue-500', 'text-white');
+        toast.innerHTML = `
+            <div class="flex items-center">
+                <i class="fas fa-info-circle mr-2 text-xl"></i>
+                ${message}
+            </div>
+            <button onclick="this.parentElement.remove()" class="text-white focus:outline-none ml-4">
+                <i class="fas fa-times"></i>
+            </button>
+        `;
+    }
+    
+    // Thêm toast vào body
+    document.body.appendChild(toast);
+    
+    // Tự động xóa toast sau 3 giây
+    setTimeout(() => {
+        toast.classList.remove('animate__fadeInRight');
+        toast.classList.add('animate__fadeOutRight');
+        setTimeout(() => {
+            toast.remove();
+        }, 500);
+    }, 3000);
+}
 </script>
 
 </body>

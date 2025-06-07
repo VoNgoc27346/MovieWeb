@@ -24,6 +24,19 @@ class MovieController {
 
         $bannerData = $this->getBannerFromApi($apiUrl);
 
+        // Kiểm tra xem phim đã được yêu thích hay chưa (nếu đã đăng nhập)
+        if (isLoggedIn()) {
+            $userId = $_SESSION['user_id'];
+            
+            // Tạo instance của Favorite model để kiểm tra trạng thái yêu thích
+            require_once 'models/Favorite.php';
+            $favoriteModel = new Favorite();
+            
+            foreach ($movies as &$movie) {
+                $movie['is_favorite'] = $favoriteModel->isFavorite($userId, $movie['movie_id']);
+            }
+        }
+
         // Gửi dữ liệu đến view
         require_once 'views/movies/home.php';
     }
@@ -122,20 +135,34 @@ class MovieController {
     }
 
     public function watch($slug) {
-        // Tìm phim theo slug
+        // Lấy thông tin phim theo slug sử dụng movieModel thay vì db
         $movie = $this->movieModel->getMovieBySlug($slug);
-
-        if ($movie && isset($movie['movie_id'])) {
-            $movie_id = (int)$movie['movie_id'];
-            $comments = $this->getComments($movie_id);
-
-            $this->render('movies/watch', [
-                'movie' => $movie,
-                'comments' => $comments
-            ]);
-        } else {
-            echo "Phim không tồn tại hoặc thiếu ID.";
+        
+        if (!$movie) {
+            // Phim không tồn tại
+            header("Location: index.php");
+            exit;
         }
+        
+        // Kiểm tra xem phim đã được yêu thích hay chưa (nếu đã đăng nhập)
+        $isFavorite = false;
+        if (isLoggedIn()) {
+            $userId = $_SESSION['user_id'];
+            
+            // Tạo instance của Favorite model để kiểm tra trạng thái yêu thích
+            require_once 'models/Favorite.php';
+            $favoriteModel = new Favorite();
+            $isFavorite = $favoriteModel->isFavorite($userId, $movie['movie_id']);
+        }
+        
+        // Hiển thị trang xem phim
+        $movie['is_favorite'] = $isFavorite;
+        
+        // Lấy bình luận cho phim
+        $comments = $this->commentModel->getComments($movie['movie_id']);
+        
+        // Hiển thị trang xem phim
+        require_once 'views/movies/watch.php';
     }
 
     public function getComments($movie_id, $episode_id = null) {

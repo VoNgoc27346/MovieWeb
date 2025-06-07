@@ -74,24 +74,31 @@ require_once 'helpers.php';
   <main class="container mx-auto py-6 px-4">
     <div class="flex flex-col lg:flex-row gap-6">
       <!-- Left Section - Video Player -->
-      <div class="w-full lg:w-2/3">
-        <!-- Video Player -->
-        <div class="bg-black relative aspect-video rounded-lg flex items-center justify-center overflow-hidden mb-6">
-          <img src="https://via.placeholder.com/1280x720" alt="Movie Thumbnail" class="w-full h-full object-cover opacity-50" />
-            <div class="absolute">
-              <button class="bg-green-600 hover:bg-green-700 text-white p-6 rounded-full flex items-center justify-center transform transition hover:scale-110" onclick="openVideo('<?= $movie['video_url']; ?>')">
-              <i class="fas fa-play text-3xl"></i>
-              </button>
-          </div>
-        </div>
+      <div class="w-full lg:w-5/6">
 
-        <!-- Modal Video Display -->
-        <div id="videoModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-          <div class="relative w-full h-full max-w-3xl">
-              <button onclick="closeModal()" class="absolute top-2 right-2 text-white text-2xl">X</button>
-              <iframe id="videoIframe" width="100%" height="100%" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+      <!-- Khung video -->
+      <div id="videoContainer" class="bg-black relative aspect-video rounded-lg flex items-center justify-center overflow-hidden mb-6 w-full h-[600px]">
+          <!-- Ảnh đại diện + nút play -->
+          <div id="videoThumbnail" class="w-full h-full relative">
+              <img src="https://via.placeholder.com/1280x720" alt="Movie Thumbnail"
+                  class="w-full h-full object-cover opacity-50" />
+              <div class="absolute inset-0 flex items-center justify-center">
+                  <button onclick="playVideo('<?= htmlspecialchars($movie['trailer_url']); ?>')"
+                          class="bg-green-600 hover:bg-green-700 text-white p-6 rounded-full flex items-center justify-center transform transition hover:scale-110 shadow-lg">
+                      <i class="fas fa-play text-3xl"></i>
+                  </button>
+              </div>
           </div>
-        </div>
+
+          <!-- Iframe video sẽ hiển thị ở đây -->
+          <div id="videoFrame" class="absolute inset-0 w-full h-full hidden">
+              <iframe id="youtubeIframe" class="w-full h-full" src="" frameborder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowfullscreen></iframe>
+          </div>
+      </div>
+
+
           <!-- Title and Actions -->
           <div class="mb-6">
             <div class="flex flex-col md:flex-row md:items-center justify-between mb-2">
@@ -117,8 +124,12 @@ require_once 'helpers.php';
                 <button class="p-2 rounded-full hover:bg-gray-700">
                   <i class="fas fa-share-alt"></i>
                 </button>
-                <button class="p-2 rounded-full hover:bg-gray-700">
-                  <i class="fas fa-bookmark"></i>
+                <button id="favorite-btn" 
+                    class="p-2 rounded-full hover:bg-gray-700"
+                    onclick="toggleFavorite(this, <?= $movie['movie_id'] ?>)"
+                    data-movie-id="<?= $movie['movie_id'] ?>"
+                >
+                  <i class="fas fa-heart <?= (isset($movie['is_favorite']) && $movie['is_favorite']) ? 'text-red-500' : 'text-gray-400' ?>"></i>
                 </button>
               </div>
             </div>
@@ -591,6 +602,40 @@ require_once 'helpers.php';
 
   </script>
   <script>
+  function playVideo(url) {
+    const embedUrl = convertYouTubeToEmbed(url);
+    document.getElementById("youtubeIframe").src = embedUrl;
+    document.getElementById("videoThumbnail").classList.add("hidden");
+    document.getElementById("videoFrame").classList.remove("hidden");
+  }
+
+  function convertYouTubeToEmbed(url) {
+    try {
+      const urlObj = new URL(url);
+      if (urlObj.hostname.includes('youtube.com') && urlObj.searchParams.get('v')) {
+        const videoId = urlObj.searchParams.get('v');
+        const t = urlObj.searchParams.get('t');
+        const start = t ? `?start=${parseYouTubeTime(t)}` : '';
+        return `https://www.youtube.com/embed/${videoId}${start}&autoplay=1`;
+      }
+      return url;
+    } catch (e) {
+      return url;
+    }
+  }
+
+  function parseYouTubeTime(t) {
+    if (!t) return 0;
+    if (!isNaN(t)) return parseInt(t);
+    const match = t.match(/(?:(\d+)h)?(?:(\d+)m)?(?:(\d+)s)?/);
+    const h = parseInt(match[1]) || 0;
+    const m = parseInt(match[2]) || 0;
+    const s = parseInt(match[3]) || 0;
+    return h * 3600 + m * 60 + s;
+  }
+</script>
+
+  <script>
     console.log("JS loaded!");
 
     const ratingContainer = document.querySelector('#star-rating');
@@ -598,7 +643,7 @@ require_once 'helpers.php';
       ratingContainer.querySelectorAll('i').forEach((star, index) => {
         star.addEventListener('click', () => {
           const score = star.getAttribute('data-value');
-          const movieId = <?= json_encode($movie['id']) ?>;
+          const movieId = <?= json_encode($movie['movie_id']) ?>;
 
           if (!score || !movieId) {
             console.warn("Thiếu dữ liệu để đánh giá.");
@@ -636,6 +681,120 @@ require_once 'helpers.php';
           });
         });
       });
+    }
+  </script>
+
+  <script>
+    // Hàm xử lý yêu thích phim
+    function toggleFavorite(button, movieId) {
+        <?php if (!isLoggedIn()): ?>
+        // Nếu chưa đăng nhập, chuyển hướng đến trang đăng nhập
+        window.location.href = 'index.php?controller=user&action=login';
+        return;
+        <?php endif; ?>
+        
+        // Tạo form data
+        const formData = new FormData();
+        formData.append('movie_id', movieId);
+        
+        // Gửi request AJAX
+        fetch('index.php?controller=favorite&action=toggle', {
+            method: 'POST',
+            body: formData,
+            credentials: 'same-origin'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Cập nhật UI
+                const heartIcon = button.querySelector('i.fas.fa-heart');
+                
+                if (data.data.action === 'added') {
+                    heartIcon.classList.remove('text-gray-400');
+                    heartIcon.classList.add('text-red-500');
+                    
+                    // Hiển thị thông báo
+                    showNotification('Đã thêm vào danh sách yêu thích', 'success');
+                } else {
+                    heartIcon.classList.remove('text-red-500');
+                    heartIcon.classList.add('text-gray-400');
+                    
+                    // Hiển thị thông báo
+                    showNotification('Đã xóa khỏi danh sách yêu thích', 'info');
+                }
+            } else {
+                // Hiển thị thông báo lỗi
+                showNotification(data.message, 'error');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showNotification('Đã xảy ra lỗi khi xử lý yêu cầu', 'error');
+        });
+    }
+
+    // Hàm hiển thị thông báo
+    function showNotification(message, type = 'info') {
+        // Tìm hoặc tạo container cho thông báo
+        let notificationContainer = document.getElementById('notification-container');
+        if (!notificationContainer) {
+            notificationContainer = document.createElement('div');
+            notificationContainer.id = 'notification-container';
+            notificationContainer.className = 'fixed top-4 right-4 z-50 flex flex-col gap-2';
+            document.body.appendChild(notificationContainer);
+        }
+        
+        // Tạo thông báo
+        const notification = document.createElement('div');
+        notification.className = 'animate__animated animate__fadeInRight p-4 rounded-md shadow-lg flex items-center justify-between max-w-md';
+        
+        // Thiết lập màu sắc dựa trên loại thông báo
+        if (type === 'success') {
+            notification.classList.add('bg-green-500', 'text-white');
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas fa-check-circle mr-2 text-xl"></i>
+                    ${message}
+                </div>
+                <button onclick="this.parentElement.remove()" class="text-white focus:outline-none ml-4">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+        } else if (type === 'error') {
+            notification.classList.add('bg-red-500', 'text-white');
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas fa-exclamation-circle mr-2 text-xl"></i>
+                    ${message}
+                </div>
+                <button onclick="this.parentElement.remove()" class="text-white focus:outline-none ml-4">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+        } else {
+            notification.classList.add('bg-blue-500', 'text-white');
+            notification.innerHTML = `
+                <div class="flex items-center">
+                    <i class="fas fa-info-circle mr-2 text-xl"></i>
+                    ${message}
+                </div>
+                <button onclick="this.parentElement.remove()" class="text-white focus:outline-none ml-4">
+                    <i class="fas fa-times"></i>
+                </button>
+            `;
+        }
+        
+        // Thêm thông báo vào container
+        notificationContainer.appendChild(notification);
+        
+        // Tự động xóa thông báo sau 3 giây
+        setTimeout(() => {
+            notification.classList.remove('animate__fadeInRight');
+            notification.classList.add('animate__fadeOutRight');
+            setTimeout(() => {
+                notification.remove();
+            }, 500);
+        }, 3000);
     }
   </script>
 

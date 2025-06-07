@@ -6,7 +6,7 @@ class Database {
 
     private function __construct() {
         $host = 'localhost';
-        $dbname = 'movie_online';
+        $dbname = 'movie_online2';
         $username = 'root';
         $password = '';
         
