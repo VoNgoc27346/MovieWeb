@@ -95,7 +95,7 @@ switch ($controllerName) {
         }
         break;
     case 'comment':
-        if ($action === 'submit') {
+        if ($action === 'comment_post') {
             $commentController->postComment();
         } elseif ($action === 'delete') {
             $commentController->deleteComment();
