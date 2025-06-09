@@ -71,6 +71,18 @@ class MovieModel {
         $stmt->execute([$slug]);
         return $stmt->fetchColumn() > 0;
     }
+
+    public static function getTopViewedMovies($limit = 10)
+    {
+        $db = Database::getInstance();
+        $sql = "SELECT * FROM movies ORDER BY views DESC LIMIT ?";
+        
+        $pdo = $db->getConnection();
+        $stmt = $pdo->prepare("SELECT * FROM movies ORDER BY views DESC LIMIT :limit");
+        $stmt->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
 }
 
 class CountryModel {

@@ -2,6 +2,8 @@
 require_once 'helpers.php';
 require_once 'models/Comment.php';
 require_once 'controllers/CommentController.php';
+require_once 'controllers/MovieController.php';
+require_once 'models/MovieModel.php';
 ?>
 
 <!DOCTYPE html>
@@ -69,9 +71,6 @@ require_once 'controllers/CommentController.php';
     <!-- Header -->
     <?php include('./views/layouts/header.php'); ?>
 
-    <!-- Thông báo lỗi -->
-    <p id="rating-error" class="text-red-500 text-sm mt-2 hidden"></p>
-
   
   <main class="container mx-auto py-6 px-4">
     <div class="flex flex-col lg:flex-row gap-6">
@@ -122,6 +121,8 @@ require_once 'controllers/CommentController.php';
                   <i class="fa-regular fa-star text-yellow-400 text-xl cursor-pointer hover:scale-110 transition" data-value="10"></i>
                 </div>
                 <p id="rating-label" class="text-xs text-gray-400 mt-1 ml-[5.2rem]"></p>
+                <p id="rating-error" class="text-sm mt-2 hidden transition-opacity duration-500"></p>
+
 
                 <button class="p-2 rounded-full hover:bg-gray-700">
                   <i class="fas fa-share-alt"></i>
@@ -335,254 +336,41 @@ require_once 'controllers/CommentController.php';
             <h2 class="text-xl font-semibold">
               Danh sách tập
             </h2>
-            <div class="flex space-x-2">
-              <button 
-                id="series-btn"
-                class="type-button px-3 py-1 rounded-md text-sm bg-green-600 text-white"
-                onclick="toggleMovieType('series')"
-              >
-                Phim bộ
-              </button>
-              <button 
-                id="movie-btn"
-                class="type-button px-3 py-1 rounded-md text-sm bg-gray-700 text-gray-300"
-                onclick="toggleMovieType('movie')"
-              >
-                Phim lẻ
-              </button>
-            </div>
           </div>
           
-          <!-- Series Content -->
-          <div id="series-content" class="space-y-2 max-h-[700px] overflow-y-auto">
-            <div 
-              id="episode-1"
-              class="episode-item flex items-center p-3 rounded-lg cursor-pointer bg-green-600"
-              onclick="setActiveEpisode(1)"
-            >
-              <div class="w-16 h-12 bg-gray-600 rounded overflow-hidden flex-shrink-0">
-                <img src="https://via.placeholder.com/64x48" alt="Episode 1 Thumbnail" class="w-full h-full object-cover" />
-              </div>
-              <div class="ml-3">
-                <h3 class="font-medium">Tập 1</h3>
-                <p class="text-sm text-gray-300">45 phút</p>
-              </div>
-            </div>
-            
-            <div 
-              id="episode-2"
-              class="episode-item flex items-center p-3 rounded-lg cursor-pointer bg-gray-700 hover:bg-gray-600"
-              onclick="setActiveEpisode(2)"
-            >
-              <div class="w-16 h-12 bg-gray-600 rounded overflow-hidden flex-shrink-0">
-                <img src="https://via.placeholder.com/64x48" alt="Episode 2 Thumbnail" class="w-full h-full object-cover" />
-              </div>
-              <div class="ml-3">
-                <h3 class="font-medium">Tập 2</h3>
-                <p class="text-sm text-gray-300">45 phút</p>
-              </div>
-            </div>
-            
-            <div 
-              id="episode-3"
-              class="episode-item flex items-center p-3 rounded-lg cursor-pointer bg-gray-700 hover:bg-gray-600"
-              onclick="setActiveEpisode(3)"
-            >
-              <div class="w-16 h-12 bg-gray-600 rounded overflow-hidden flex-shrink-0">
-                <img src="https://via.placeholder.com/64x48" alt="Episode 3 Thumbnail" class="w-full h-full object-cover" />
-              </div>
-              <div class="ml-3">
-                <h3 class="font-medium">Tập 3</h3>
-                <p class="text-sm text-gray-300">45 phút</p>
-              </div>
-            </div>
-            
-            <div 
-              id="episode-4"
-              class="episode-item flex items-center p-3 rounded-lg cursor-pointer bg-gray-700 hover:bg-gray-600"
-              onclick="setActiveEpisode(4)"
-            >
-              <div class="w-16 h-12 bg-gray-600 rounded overflow-hidden flex-shrink-0">
-                <img src="https://via.placeholder.com/64x48" alt="Episode 4 Thumbnail" class="w-full h-full object-cover" />
-              </div>
-              <div class="ml-3">
-                <h3 class="font-medium">Tập 4</h3>
-                <p class="text-sm text-gray-300">45 phút</p>
-              </div>
-            </div>
-            
-            <div 
-              id="episode-5"
-              class="episode-item flex items-center p-3 rounded-lg cursor-pointer bg-gray-700 hover:bg-gray-600"
-              onclick="setActiveEpisode(5)"
-            >
-              <div class="w-16 h-12 bg-gray-600 rounded overflow-hidden flex-shrink-0">
-                <img src="https://via.placeholder.com/64x48" alt="Episode 5 Thumbnail" class="w-full h-full object-cover" />
-              </div>
-              <div class="ml-3">
-                <h3 class="font-medium">Tập 5</h3>
-                <p class="text-sm text-gray-300">45 phút</p>
-              </div>
-            </div>
-            
-            <div 
-              id="episode-6"
-              class="episode-item flex items-center p-3 rounded-lg cursor-pointer bg-gray-700 hover:bg-gray-600"
-              onclick="setActiveEpisode(6)"
-            >
-              <div class="w-16 h-12 bg-gray-600 rounded overflow-hidden flex-shrink-0">
-                <img src="https://via.placeholder.com/64x48" alt="Episode 6 Thumbnail" class="w-full h-full object-cover" />
-              </div>
-              <div class="ml-3">
-                <h3 class="font-medium">Tập 6</h3>
-                <p class="text-sm text-gray-300">45 phút</p>
-              </div>
-            </div>
-            
-            <div 
-              id="episode-7"
-              class="episode-item flex items-center p-3 rounded-lg cursor-pointer bg-gray-700 hover:bg-gray-600"
-              onclick="setActiveEpisode(7)"
-            >
-              <div class="w-16 h-12 bg-gray-600 rounded overflow-hidden flex-shrink-0">
-                <img src="https://via.placeholder.com/64x48" alt="Episode 7 Thumbnail" class="w-full h-full object-cover" />
-              </div>
-              <div class="ml-3">
-                <h3 class="font-medium">Tập 7</h3>
-                <p class="text-sm text-gray-300">45 phút</p>
-              </div>
-            </div>
-            
-            <div 
-              id="episode-8"
-              class="episode-item flex items-center p-3 rounded-lg cursor-pointer bg-gray-700 hover:bg-gray-600"
-              onclick="setActiveEpisode(8)"
-            >
-              <div class="w-16 h-12 bg-gray-600 rounded overflow-hidden flex-shrink-0">
-                <img src="https://via.placeholder.com/64x48" alt="Episode 8 Thumbnail" class="w-full h-full object-cover" />
-              </div>
-              <div class="ml-3">
-                <h3 class="font-medium">Tập 8</h3>
-                <p class="text-sm text-gray-300">45 phút</p>
-              </div>
-            </div>
-            
-            <div 
-              id="episode-9"
-              class="episode-item flex items-center p-3 rounded-lg cursor-pointer bg-gray-700 hover:bg-gray-600"
-              onclick="setActiveEpisode(9)"
-            >
-              <div class="w-16 h-12 bg-gray-600 rounded overflow-hidden flex-shrink-0">
-                <img src="https://via.placeholder.com/64x48" alt="Episode 9 Thumbnail" class="w-full h-full object-cover" />
-              </div>
-              <div class="ml-3">
-                <h3 class="font-medium">Tập 9</h3>
-                <p class="text-sm text-gray-300">45 phút</p>
-              </div>
-            </div>
-          </div>
           
-          <!-- Movie Content (Hidden by Default) -->
-          <div id="movie-content" class="hidden grid grid-cols-1 gap-4 max-h-[700px] overflow-y-auto">
-            <!-- Phim liên quan 1 -->
-            <div class="flex bg-gray-700 rounded-lg overflow-hidden hover:bg-gray-600 cursor-pointer transition">
-              <div class="w-16 h-24 bg-gray-600 flex-shrink-0">
-                <img src="https://via.placeholder.com/64x96" alt="The Dark Knight Poster" class="w-full h-full object-cover" />
-              </div>
-              <div class="p-3">
-                <h3 class="font-medium text-sm">The Dark Knight</h3>
-                <div class="flex items-center mt-1">
-                  <i class="fas fa-star text-yellow-400 text-xs"></i>
-                  <span class="text-xs ml-1">9.0</span>
-                </div>
-                <div class="flex flex-wrap gap-1 mt-1">
-                  <span class="text-xs text-gray-300">Hành động</span>,
-                  <span class="text-xs text-gray-300">Tội phạm</span>
-                </div>
-                <p class="text-xs text-gray-400 mt-1">2008</p>
-              </div>
-            </div>
-            
-            <!-- Phim liên quan 2 -->
-            <div class="flex bg-gray-700 rounded-lg overflow-hidden hover:bg-gray-600 cursor-pointer transition">
-              <div class="w-16 h-24 bg-gray-600 flex-shrink-0">
-                <img src="https://via.placeholder.com/64x96" alt="Interstellar Poster" class="w-full h-full object-cover" />
-              </div>
-              <div class="p-3">
-                <h3 class="font-medium text-sm">Interstellar</h3>
-                <div class="flex items-center mt-1">
-                  <i class="fas fa-star text-yellow-400 text-xs"></i>
-                  <span class="text-xs ml-1">8.6</span>
-                </div>
-                <div class="flex flex-wrap gap-1 mt-1">
-                  <span class="text-xs text-gray-300">Khoa học viễn tưởng</span>,
-                  <span class="text-xs text-gray-300">Phiêu lưu</span>
-                </div>
-                <p class="text-xs text-gray-400 mt-1">2014</p>
+          
+          <?php if (!empty($movies)): ?>
+            <div class="max-w-4xl w-full">
+              <h1 class="text-3xl font-bold mb-6 text-center">Top phim được xem nhiều nhất</h1>
+              <div class="grid md:grid-cols-2 gap-6">
+                <?php foreach ($movies as $movie): ?>
+                  <div class="flex bg-gray-800 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition">
+                    <div class="w-24 h-36 bg-gray-700 flex-shrink-0">
+                      <img src="<?= $movie['poster'] ?? 'https://via.placeholder.com/96x144' ?>" alt="<?= htmlspecialchars($movie['title']) ?>" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-4 flex flex-col justify-between">
+                      <div>
+                        <h2 class="text-lg font-semibold"><?= htmlspecialchars($movie['title']) ?></h2>
+                        <p class="text-sm text-gray-400 mt-1"><?= htmlspecialchars($movie['description']) ?></p>
+                      </div>
+                      <div class="mt-2 text-sm text-gray-300">👁️ <?= number_format($movie['views']) ?> lượt xem</div>
+                    </div>
+                  </div>
+                <?php endforeach; ?>
               </div>
             </div>
-            
-            <!-- Phim liên quan 3 -->
-            <div class="flex bg-gray-700 rounded-lg overflow-hidden hover:bg-gray-600 cursor-pointer transition">
-              <div class="w-16 h-24 bg-gray-600 flex-shrink-0">
-                <img src="https://via.placeholder.com/64x96" alt="The Matrix Poster" class="w-full h-full object-cover" />
-              </div>
-              <div class="p-3">
-                <h3 class="font-medium text-sm">The Matrix</h3>
-                <div class="flex items-center mt-1">
-                  <i class="fas fa-star text-yellow-400 text-xs"></i>
-                  <span class="text-xs ml-1">8.7</span>
-                </div>
-                <div class="flex flex-wrap gap-1 mt-1">
-                  <span class="text-xs text-gray-300">Hành động</span>,
-                  <span class="text-xs text-gray-300">Khoa học viễn tưởng</span>
-                </div>
-                <p class="text-xs text-gray-400 mt-1">1999</p>
-              </div>
-            </div>
-            
-            <!-- Phim liên quan 4 -->
-            <div class="flex bg-gray-700 rounded-lg overflow-hidden hover:bg-gray-600 cursor-pointer transition">
-              <div class="w-16 h-24 bg-gray-600 flex-shrink-0">
-                <img src="https://via.placeholder.com/64x96" alt="Parasite Poster" class="w-full h-full object-cover" />
-              </div>
-              <div class="p-3">
-                <h3 class="font-medium text-sm">Parasite</h3>
-                <div class="flex items-center mt-1">
-                  <i class="fas fa-star text-yellow-400 text-xs"></i>
-                  <span class="text-xs ml-1">8.5</span>
-                </div>
-                <div class="flex flex-wrap gap-1 mt-1">
-                  <span class="text-xs text-gray-300">Kịch tính</span>,
-                  <span class="text-xs text-gray-300">Hài đen</span>
-                </div>
-                <p class="text-xs text-gray-400 mt-1">2019</p>
-              </div>
-            </div>
-            
-            <!-- Phim liên quan 5 -->
-            <div class="flex bg-gray-700 rounded-lg overflow-hidden hover:bg-gray-600 cursor-pointer transition">
-              <div class="w-16 h-24 bg-gray-600 flex-shrink-0">
-                <img src="https://via.placeholder.com/64x96" alt="Inception Poster" class="w-full h-full object-cover" />
-              </div>
-              <div class="p-3">
-                <h3 class="font-medium text-sm">Inception</h3>
-                <div class="flex items-center mt-1">
-                  <i class="fas fa-star text-yellow-400 text-xs"></i>
-                  <span class="text-xs ml-1">8.8</span>
-                </div>
-                <div class="flex flex-wrap gap-1 mt-1">
-                  <span class="text-xs text-gray-300">Khoa học viễn tưởng</span>,
-                  <span class="text-xs text-gray-300">Hành động</span>
-                </div>
-                <p class="text-xs text-gray-400 mt-1">2010</p>
-              </div>
-            </div>
-          </div>
+          <?php else: ?>
+            <p>Không có phim nào để hiển thị.</p>
+          <?php endif; ?>
+
+
         </div>
       </div>
     </div>
   </main>
+
+
   <script>
     function openVideo(url) {
       // Mở modal và nhúng video YouTube vào iframe
@@ -641,10 +429,25 @@ require_once 'controllers/CommentController.php';
     console.log("JS loaded!");
 
     const ratingContainer = document.querySelector('#star-rating');
+    const ratingMessage = document.getElementById('rating-error');
+
+    function highlightStars(score) {
+      ratingContainer.querySelectorAll('i').forEach(star => {
+        const starValue = parseInt(star.getAttribute('data-value'));
+        if (starValue <= score) {
+          star.classList.remove('fa-regular');
+          star.classList.add('fa-solid');
+        } else {
+          star.classList.remove('fa-solid');
+          star.classList.add('fa-regular');
+        }
+      });
+    }
+
     if (ratingContainer) {
-      ratingContainer.querySelectorAll('i').forEach((star, index) => {
+      ratingContainer.querySelectorAll('i').forEach(star => {
         star.addEventListener('click', () => {
-          const score = star.getAttribute('data-value');
+          const score = parseInt(star.getAttribute('data-value'));
           const movieId = <?= json_encode($movie['movie_id']) ?>;
 
           if (!score || !movieId) {
@@ -653,6 +456,9 @@ require_once 'controllers/CommentController.php';
           }
 
           console.log("Bạn đã chọn sao: ", score, "cho phim ID:", movieId);
+
+          // Tô màu sao ngay khi người dùng chọn
+          highlightStars(score);
 
           fetch("index.php?controller=rating&action=submit", {
             method: "POST",
@@ -663,28 +469,42 @@ require_once 'controllers/CommentController.php';
           })
           .then(res => res.json())
           .then(data => {
-            console.log("Phản hồi từ server: ", data);
-            const label = document.getElementById('rating-error');
             if (data.status === 'success') {
-              label.textContent = `Đánh giá ${score / 2} sao thành công`;
-              label.classList.remove("hidden", "text-red-500");
-              label.classList.add("text-green-500");
+              ratingMessage.textContent = `✅ Đánh giá ${score / 2} sao thành công`;
+              ratingMessage.classList.remove("hidden", "text-red-500");
+              ratingMessage.classList.add("text-green-500");
             } else {
-              label.textContent = data.message || "Có lỗi xảy ra.";
-              label.classList.remove("hidden", "text-green-500");
-              label.classList.add("text-red-500");
+              ratingMessage.textContent = data.message || "❌ Có lỗi xảy ra.";
+              ratingMessage.classList.remove("hidden", "text-green-500");
+              ratingMessage.classList.add("text-red-500");
             }
-          }).catch(error => {
+
+            // Hiện thông báo và tự ẩn sau 3 giây
+            ratingMessage.classList.add("opacity-100");
+            setTimeout(() => {
+              ratingMessage.classList.add("opacity-0");
+              setTimeout(() => {
+                ratingMessage.classList.add("hidden");
+                ratingMessage.classList.remove("opacity-0");
+              }, 500); // Chờ animation fade-out hoàn tất
+            }, 3000);
+          })
+          .catch(error => {
             console.error("Lỗi khi gọi API: ", error);
-            const label = document.getElementById('rating-error');
-            label.textContent = "Có lỗi xảy ra. Vui lòng thử lại sau.";
-            label.classList.remove("hidden", "text-green-500");
-            label.classList.add("text-red-500");
+            ratingMessage.textContent = "❌ Có lỗi xảy ra. Vui lòng thử lại sau.";
+            ratingMessage.classList.remove("hidden", "text-green-500");
+            ratingMessage.classList.add("text-red-500");
+
+            // Tự ẩn thông báo sau 3 giây
+            setTimeout(() => {
+              ratingMessage.classList.add("hidden");
+            }, 3000);
           });
         });
       });
     }
   </script>
+
 
   <script>
     // Hàm xử lý yêu thích phim

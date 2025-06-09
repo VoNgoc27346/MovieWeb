@@ -94,7 +94,9 @@ if (file_exists($controllerFile)) {
                 $movieController->watch($slug);
             } elseif ($action === 'fetch') {
                 $movieController->fetchMoviesFromTMDB();
-            } else {
+            } elseif ($action === 'topViewed') {
+                $movieController->topViewed();
+            }else {
                 $movieController->index();
             }
             break;

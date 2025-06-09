@@ -194,5 +194,11 @@ class MovieController {
         
         $this->render('movie/detail', $data);
     }
+
+    public function topViewed()
+    {
+        $movies = MovieModel::getTopViewedMovies(10); // Hoặc hàm nào bạn cần
+        include 'views/movies/watch.php';
+    }
 }
 ?>
