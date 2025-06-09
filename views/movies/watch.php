@@ -333,35 +333,41 @@ require_once 'models/MovieModel.php';
       <div class="w-full lg:w-1/3">
         <div class="bg-gray-800 rounded-lg p-4">
           <div class="flex justify-between items-center mb-4">
-            <h2 class="text-xl font-semibold">
-              Danh sách tập
-            </h2>
+             <h1 class="text-3xl font-bold mb-6 text-center text-white tracking-wide">Top phim được xem nhiều nhất</h1>
           </div>
-          
-          
-          
+
           <?php if (!empty($movies)): ?>
-            <div class="max-w-4xl w-full">
-              <h1 class="text-3xl font-bold mb-6 text-center">Top phim được xem nhiều nhất</h1>
-              <div class="grid md:grid-cols-2 gap-6">
-                <?php foreach ($movies as $movie): ?>
-                  <div class="flex bg-gray-800 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition">
-                    <div class="w-24 h-36 bg-gray-700 flex-shrink-0">
+            <div class="max-w-4xl w-full mx-auto">
+              
+              
+              <div class="space-y-4">
+                <?php foreach ($movies as $index => $movie): ?>
+                  <div class="flex items-center bg-gray-800 hover:bg-gray-700 transition rounded-lg p-3 shadow-sm">
+                    <!-- Thứ tự -->
+                    <div class="text-2xl font-bold text-gray-500 w-10 text-center">
+                      <?= $index + 1 ?>
+                    </div>
+
+                    <!-- Poster -->
+                    <div class="w-16 h-24 overflow-hidden rounded bg-gray-700 shadow-inner flex-shrink-0">
                       <img src="<?= $movie['poster'] ?? 'https://via.placeholder.com/96x144' ?>" alt="<?= htmlspecialchars($movie['title']) ?>" class="w-full h-full object-cover">
                     </div>
-                    <div class="p-4 flex flex-col justify-between">
-                      <div>
-                        <h2 class="text-lg font-semibold"><?= htmlspecialchars($movie['title']) ?></h2>
-                        <p class="text-sm text-gray-400 mt-1"><?= htmlspecialchars($movie['description']) ?></p>
-                      </div>
-                      <div class="mt-2 text-sm text-gray-300">👁️ <?= number_format($movie['views']) ?> lượt xem</div>
+
+                    <!-- Thông tin phim -->
+                    <div class="ml-4 flex flex-col justify-between">
+                      <a href="index.php?controller=movie&action=watch&slug=<?= urlencode($movie['slug']) ?>" class="text-lg font-semibold text-white hover:underline">
+                        <?= htmlspecialchars($movie['title']) ?>
+                      </a>
+                      <span class="text-sm text-gray-400 mt-1">
+                        <?= number_format($movie['views']) ?> lượt xem
+                      </span>
                     </div>
                   </div>
                 <?php endforeach; ?>
               </div>
             </div>
           <?php else: ?>
-            <p>Không có phim nào để hiển thị.</p>
+            <p class="text-gray-300 text-center">Không có phim nào để hiển thị.</p>
           <?php endif; ?>
 
 

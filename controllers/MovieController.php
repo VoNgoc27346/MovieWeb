@@ -137,6 +137,8 @@ class MovieController {
     public function watch($slug) {
         // Lấy thông tin phim theo slug sử dụng movieModel thay vì db
         $movie = $this->movieModel->getMovieBySlug($slug);
+
+        $movies = MovieModel::getTopViewedMovies(10);
         
         if (!$movie) {
             // Phim không tồn tại
