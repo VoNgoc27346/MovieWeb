@@ -112,7 +112,9 @@ require_once 'models/MovieModel.php';
                 </div>
 
                 <!-- Rating -->
-                <div class="flex items-center space-x-1 mt-1" id="star-rating">
+                <!-- <div class="flex items-center space-x-1 mt-1" id="star-rating"> -->
+                <div class="flex items-center space-x-1 mt-1" id="star-rating" data-movie-id="<?= $movie['movie_id'] ?>">
+
                   <span class="text-sm text-gray-400 mr-2">Đánh giá của bạn:</span>
                   <i class="fa-regular fa-star text-yellow-400 text-xl cursor-pointer hover:scale-110 transition" data-value="2"></i>
                   <i class="fa-regular fa-star text-yellow-400 text-xl cursor-pointer hover:scale-110 transition" data-value="4"></i>
@@ -454,7 +456,8 @@ require_once 'models/MovieModel.php';
       ratingContainer.querySelectorAll('i').forEach(star => {
         star.addEventListener('click', () => {
           const score = parseInt(star.getAttribute('data-value'));
-          const movieId = <?= json_encode($movie['movie_id']) ?>;
+          // const movieId = <?= json_encode($movie['movie_id']) ?>;
+          const movieId = parseInt(ratingContainer.getAttribute('data-movie-id'));
 
           if (!score || !movieId) {
             console.warn("Thiếu dữ liệu để đánh giá.");
