@@ -424,9 +424,6 @@ require_once dirname(__DIR__, 2) . '/helpers.php';
     <div class="flex items-center gap-5">
         <input type="text" placeholder="Tìm kiếm" class="px-3 py-1 rounded bg-[#292f44] text-white placeholder-gray-400 text-sm focus:outline-none" />
         <button class="text-[#686b70] hover:text-[#27bd52] text-base">Lịch sử</button>
-        <button class="w-9 h-9 bg-[#23252e] rounded-full flex items-center justify-center">
-            <img src="https://ext.same-assets.com/3427629531/2457699613.png" alt="avatar" class="w-8 h-8 rounded-full" />
-        </button>
         <a href="index.php?view=vip.php" class="bg-gradient-to-r from-yellow-500 to-yellow-600 text-black text-sm font-bold rounded-md px-5 py-1.5 ml-2 hover:from-yellow-600 hover:to-yellow-700 shadow-lg flex items-center">
             <i class="fas fa-crown mr-1"></i> VIP
         </a>
